@@ -1,8 +1,21 @@
 const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { v4: uuidv4 } = require('uuid');
 const OpenAI = require('openai');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+
+// Initialize S3 Client
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME;
 
 // Define the base prompt for stylization
 const BASE_STYLIZE_PROMPT = 'Transform this child’s drawing into a hyper-realistic, cinematic 3D render as if it were captured through a high-end film camera in the real world. Every detail of the original drawing must be preserved with absolute fidelity — including all imperfections, unusual proportions, crooked lines, lopsided features, exaggerated expressions, and imaginative distortions. Do not clean up, beautify, or refine any part of the artwork — maintain the raw spontaneity and creative quirks exactly as they appear.Render the figures and objects using ultra-realistic materials: soft, lifelike skin; fuzzy felt or fabric textures for clothing; wispy natural hair; realistically shaded fur for animals; and aged, weathered wood for houses or structures. Integrate accurate physical lighting, directional shadows, and cinematic depth of field — as required to highlight the objects and scenes and shot with a full-frame lens.Place the entire scene in a visually appropriate setting that matches the tone and vibe of the child’s imagination — playful, whimsical, and slightly surreal. The final image should feel like a movie still or a high-budget CGI frame — photorealistic, emotionally rich, and deeply faithful to the original hand-drawn story.';
@@ -37,12 +50,24 @@ async function enhanceImage(imageId, enhancementType, prompt) {
       // For 'stylize', use the predefined base prompt
       const result = await enhanceWithOpenAI(actualInputPath, BASE_STYLIZE_PROMPT);
       if (result.success) {
-        await fs.writeFile(outputPath, result.imageBuffer);
-        console.log(`Enhanced image saved to: ${outputPath}`);
+        const outputId = uuidv4();
+        const s3Key = `enhanced/${outputId}.png`; // S3 key for the enhanced image
+
+        // Upload to S3
+        const uploadParams = {
+          Bucket: S3_BUCKET_NAME,
+          Key: s3Key,
+          Body: result.imageBuffer,
+          ContentType: 'image/png',
+          ACL: 'public-read', // Make the object publicly readable
+        };
+        await s3Client.send(new PutObjectCommand(uploadParams));
+        console.log(`Enhanced image uploaded to S3: s3://${S3_BUCKET_NAME}/${s3Key}`);
+
         return {
           success: true,
           id: outputId,
-          url: `/enhanced/${outputId}.png`
+          url: `https://${S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3Key}`
         };
       } else {
         console.error('OpenAI stylize enhancement failed:', result.error);
@@ -58,12 +83,24 @@ User's specific request: ${prompt}`;
 
       const result = await enhanceWithOpenAI(actualInputPath, combinedPrompt);
       if (result.success) {
-        await fs.writeFile(outputPath, result.imageBuffer);
-        console.log(`Enhanced image saved to: ${outputPath}`);
+        const outputId = uuidv4();
+        const s3Key = `enhanced/${outputId}.png`; // S3 key for the enhanced image
+
+        // Upload to S3
+        const uploadParams = {
+          Bucket: S3_BUCKET_NAME,
+          Key: s3Key,
+          Body: result.imageBuffer,
+          ContentType: 'image/png',
+          ACL: 'public-read', // Make the object publicly readable
+        };
+        await s3Client.send(new PutObjectCommand(uploadParams));
+        console.log(`Enhanced image uploaded to S3: s3://${S3_BUCKET_NAME}/${s3Key}`);
+
         return {
           success: true,
           id: outputId,
-          url: `/enhanced/${outputId}.png`
+          url: `https://${S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3Key}`
         };
       } else {
         console.error('OpenAI custom enhancement failed:', result.error);

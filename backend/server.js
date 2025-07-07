@@ -11,31 +11,21 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.NEXT_PUBLIC_FRONTEND_URL || '*' // Allow requests from your frontend or all origins
+}));
 app.use(express.json());
 app.use(express.static('public'));
-
-// Ensure temp directories exist
-const tempDirs = ['./tmp/uploads', './tmp/outputs', './tmp/enhanced'];
-tempDirs.forEach(dir => {
-  fs.ensureDirSync(dir);
-});
 
 // Routes
 app.use('/api/upload', uploadRoutes);
 app.use('/api/enhance', enhanceRoutes);
 app.use('/api/story', storyRoutes);
 
-// Serve static files
-app.use('/uploads', express.static('./tmp/uploads'));
-app.use('/outputs', express.static('./tmp/outputs'));
-app.use('/enhanced', express.static('./tmp/enhanced'));
-
-// Cleanup old files every 15 minutes
-setInterval(() => {
-  const cleanupService = require('./utils/cleanup');
-  cleanupService.cleanupOldFiles();
-}, 15 * 60 * 1000);
+// Basic root route to confirm backend is running
+app.get('/', (req, res) => {
+  res.send('Hello from Drawing to Animation Backend!');
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
