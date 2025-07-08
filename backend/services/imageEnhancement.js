@@ -1,4 +1,5 @@
 const axios = require('axios');
+const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
 const OpenAI = require('openai');
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
@@ -117,7 +118,11 @@ async function enhanceWithOpenAI(imagePath, prompt) {
     };
     const { Body } = await s3Client.send(new GetObjectCommand(getObjectParams));
     const imageBuffer = await Body.transformToByteArray();
-    const base64Image = Buffer.from(imageBuffer).toString('base64');
+    const resizedImageBuffer = await sharp(imageBuffer)
+      .resize({ width: 1024, height: 1024, fit: sharp.fit.inside, withoutEnlargement: true })
+      .toFormat('jpeg')
+      .toBuffer();
+    const base64Image = resizedImageBuffer.toString('base64');
     console.log(`Image read from S3: ${imagePath}, base64 length: ${base64Image.length}`);
 
     console.log('Calling OpenAI chat completions (gpt-4o)...');
