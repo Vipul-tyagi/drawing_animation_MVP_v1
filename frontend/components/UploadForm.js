@@ -77,7 +77,7 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
       if (data.success) {
         const newUploadedFileData = {
           ...data,
-          url: `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}${data.url}`,
+          url: data.url,
           story: story,
         };
         setUploadedFileData(newUploadedFileData); // Update state in parent
