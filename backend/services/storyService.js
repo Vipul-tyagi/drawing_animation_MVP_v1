@@ -26,7 +26,7 @@ async function generateStory(imageId, drawingDescription) {
     };
 
     const { Body } = await s3Client.send(new GetObjectCommand(getObjectParams));
-    const imageBuffer = await Body.transformToBuffer();
+    const imageBuffer = Buffer.from(await Body.transformToByteArray());
     const base64Image = imageBuffer.toString('base64');
 
     const storyPrompt = `Generate a creative and imaginative bedtime story inspired by this drawing. Focus on the main elements and characters in the image. ${drawingDescription ? `Also, incorporate the following idea: ${drawingDescription}.` : ''} The story should be child-friendly, positive, and have a clear beginning, middle, and end.`;
