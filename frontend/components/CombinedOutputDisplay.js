@@ -44,7 +44,7 @@ export default function CombinedOutputDisplay({
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Original Drawing</h3>
             {originalImage && (
               <img
-                src={`${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}${originalImage.url}`}
+                src={originalImage.url}
                 alt="Original Drawing"
                 className="max-w-full h-auto rounded-lg mx-auto shadow-lg border border-gray-200"
               />
@@ -54,7 +54,7 @@ export default function CombinedOutputDisplay({
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Enhanced Drawing</h3>
             {enhancedImage ? (
               <img
-                src={`${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}${enhancedImage.url}`}
+                src={enhancedImage.url}
                 alt="Enhanced Drawing"
                 className="max-w-full h-auto rounded-lg mx-auto shadow-lg border border-gray-200"
               />
