@@ -57,7 +57,7 @@ export default function Home() {
         const enhancementPayload = {
           imageId: imageData.id,
           enhancementType: 'stylize', // Default to auto-stylize
-          prompt: story,
+          prompt: imageData.story,
         };
         const enhancementResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/enhance`, {
           method: 'POST',

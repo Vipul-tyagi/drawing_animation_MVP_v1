@@ -28,7 +28,7 @@ export default function StoryIdeasForm({
           <h3 className="text-lg font-semibold text-gray-700 mb-2">Your Drawing</h3>
           {image && (
             <img
-              src={`${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}${image.url}`}
+              src={image.url}
               alt="Your Drawing"
               className="max-w-full h-auto rounded-lg mx-auto shadow-lg"
             />
