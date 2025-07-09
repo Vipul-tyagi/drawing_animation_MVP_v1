@@ -7,17 +7,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "autoprefixer": "^10.4.0",
     "axios": "^1.6.0",
     "formidable": "^3.5.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "lucide-react": "^0.525.0",
     "next": "^14.0.0",
     "postcss": "^8.4.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "tailwindcss": "^3.3.0",
-    "uuid": "^9.0.1",
-    "jspdf": "^2.5.1",
-    "html2canvas": "^1.4.1"
+    "uuid": "^9.0.1"
   }
 }
