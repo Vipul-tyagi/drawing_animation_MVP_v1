@@ -5,6 +5,7 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
   const [story, setStory] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -50,17 +51,15 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
     reader.onload = (e) => setPreview(e.target.result);
     reader.readAsDataURL(file);
 
-    // Upload file
-    uploadFile(file);
+    setSelectedFile(file);
   };
 
-  const uploadFile = async (file) => {
+  const uploadFile = async () => {
     setLoading(true);
     setError(null);
-    // setUploadedFileData(null); // Clear previous data - this is now handled by parent
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', selectedFile);
     formData.append('story', story);
     console.log('UploadForm: FormData before sending:', Object.fromEntries(formData.entries()));
 
@@ -83,6 +82,7 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
         };
         setUploadedFileData(newUploadedFileData); // Update state in parent
         console.log('UploadForm: File uploaded and data stored.');
+        onUploadComplete(newUploadedFileData);
       } else {
         setError(data.error || 'Upload failed');
         console.error('UploadForm: Upload failed with error:', data.error);
@@ -97,9 +97,8 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
   };
 
   const handleGenerateStoryClick = () => {
-    // uploadedFileData is now a prop from parent
-    if (uploadedFileData) {
-      onUploadComplete(uploadedFileData);
+    if (selectedFile) {
+      uploadFile();
     }
   };
 
