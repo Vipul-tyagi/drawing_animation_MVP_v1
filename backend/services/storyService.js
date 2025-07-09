@@ -29,7 +29,7 @@ async function generateStory(imageId, drawingDescription) {
     const imageBuffer = Buffer.from(await Body.transformToByteArray());
     const base64Image = imageBuffer.toString('base64');
 
-    const storyPrompt = `Generate a creative and imaginative bedtime story inspired by this drawing. Focus on the main elements and characters in the image. ${drawingDescription ? `Also, incorporate the following idea: ${drawingDescription}.` : ''} The story should be child-friendly, positive, and have a clear beginning, middle, and end.`;
+    const storyPrompt = `Generate a creative and imaginative bedtime story inspired by this drawing. The user has provided the following description: "${drawingDescription}". Please use this description as the central theme of the story. The story should be child-friendly, positive, and have a clear beginning, middle, and end.`;
 
     console.log(`Generating story for image ${imageId} with prompt: ${storyPrompt}`);
 

@@ -56,8 +56,8 @@ export default function Home() {
         // Trigger automatic enhancement after story generation
         const enhancementPayload = {
           imageId: imageData.id,
-          enhancementType: 'stylize', // Default to auto-stylize
-          prompt: imageData.story,
+          enhancementType: 'stylize',
+          prompt: storyData.story, // Use the generated story as the prompt
         };
         const enhancementResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/enhance`, {
           method: 'POST',
