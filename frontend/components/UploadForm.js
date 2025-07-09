@@ -189,8 +189,8 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
           <div className="text-center mt-6">
           <button
             onClick={handleGenerateStoryClick}
-            disabled={!uploadedFileData}
-            className={`bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 ${!uploadedFileData ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!selectedFile}
+            className={`bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 ${!selectedFile ? 'opacity-50 cursor-not-allowed' : ''}`}}
           >
             Bring My Drawing to Life!
           </button>
