@@ -26,8 +26,9 @@ async function enhanceImage(imageId, enhancementType, prompt) {
 
     if (enhancementType === 'stylize') {
       console.log('Enhancement type: stylize');
-      // For 'stylize', use the predefined base prompt
-      const result = await enhanceWithOpenAI(s3KeyOriginal, BASE_STYLIZE_PROMPT);
+      // For 'stylize', combine the base prompt with the generated story
+      const combinedPrompt = `${BASE_STYLIZE_PROMPT}\n\nStory to incorporate: ${prompt}`;
+      const result = await enhanceWithOpenAI(s3KeyOriginal, combinedPrompt);
       if (result.success) {
         const outputId = uuidv4();
         const s3KeyEnhanced = `enhanced/${outputId}.png`; // S3 key for the enhanced image
