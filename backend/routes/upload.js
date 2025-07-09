@@ -33,6 +33,7 @@ const upload = multer({
 });
 
 router.post('/', upload.single('file'), async (req, res) => {
+  console.log('Upload route: req.body:', req.body);
   try {
     if (!req.file) {
       return res.status(400).json({

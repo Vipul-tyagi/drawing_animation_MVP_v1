@@ -62,6 +62,7 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
     const formData = new FormData();
     formData.append('file', file);
     formData.append('story', story);
+    console.log('UploadForm: FormData before sending:', Object.fromEntries(formData.entries()));
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/upload`, {
