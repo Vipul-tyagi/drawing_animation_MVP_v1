@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { Upload, BookOpen } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { Upload, BookOpen, LogOut } from 'lucide-react'; // Import LogOut icon
 
 import UploadForm from '../components/UploadForm';
 import CombinedOutputDisplay from '../components/CombinedOutputDisplay';
@@ -30,53 +31,107 @@ export default function Home() {
   const [enhancedImage, setEnhancedImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const router = useRouter(); // Initialize useRouter
 
-  const handleUploadAndDescribeComplete = async (imageData) => {
-    console.log('Index: handleUploadAndDescribeComplete called with:', imageData);
-    setUploadedImage(imageData);
-    setUploadedFileData(imageData);
-    console.log('Index: uploadedFileData after setting:', imageData);
+  const handleLogout = () => {
+    localStorage.removeItem('authToken'); // Clear the token
+    router.push('/login'); // Redirect to login page
+  };
+
+  const handleGenerateClick = async (file, story) => {
     setLoading(true);
     setError(null);
 
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('story', story);
+
     try {
-      const storyResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/story`, {
+      const authToken = localStorage.getItem('authToken');
+      const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/upload`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageId: imageData.id,
-          drawingDescription: imageData.story,
-        }),
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+        },
+        body: formData,
       });
 
-      const storyData = await storyResponse.json();
+      const uploadData = await uploadResponse.json();
 
-      if (storyData.success) {
-        setStoryResult(storyData.story);
-        // Trigger automatic enhancement after story generation
-        const enhancementPayload = {
-          imageId: imageData.id,
-          enhancementType: 'stylize',
-          prompt: storyData.story, // Use the generated story as the prompt
-        };
-        const enhancementResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/enhance`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(enhancementPayload),
+      if (uploadData.success) {
+        const creationResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/creations/${uploadData.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          },
         });
-        const enhancementData = await enhancementResponse.json();
+        const creationData = await creationResponse.json();
 
-        if (enhancementData.success) {
-          setEnhancedImage(enhancementData);
-          setCurrentPhase('output');
+        if (creationData.success) {
+          const fetchedCreation = creationData.creation;
+          setUploadedImage({ id: fetchedCreation.creationId, url: fetchedCreation.originalImageUrl });
+          setUploadedFileData(fetchedCreation);
+
+          const storyResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/story`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            },
+            body: JSON.stringify({
+              imageId: fetchedCreation.creationId,
+              drawingDescription: fetchedCreation.userPromptText,
+              s3Key: fetchedCreation.s3Key,
+            }),
+          });
+
+          const storyData = await storyResponse.json();
+
+          if (storyData.success) {
+            setStoryResult(storyData.story);
+
+            const enhancementPayload = {
+              imageId: fetchedCreation.creationId,
+              enhancementType: 'stylize',
+              prompt: storyData.story,
+            };
+            const enhancementResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/enhance`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+              },
+              body: JSON.stringify(enhancementPayload),
+            });
+            const enhancementData = await enhancementResponse.json();
+
+            if (enhancementData.success) {
+              const finalCreationResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/creations/${fetchedCreation.creationId}`, {
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                },
+              });
+              const finalCreationData = await finalCreationResponse.json();
+
+              if (finalCreationData.success) {
+                setUploadedFileData(finalCreationData.creation);
+                setCurrentPhase('output');
+              } else {
+                setError(finalCreationData.error || 'Failed to re-fetch final creation details.');
+              }
+            } else {
+              setError(enhancementData.error || 'Failed to enhance image.');
+            }
+          } else {
+            setError(storyData.error || 'Failed to generate story.');
+          }
         } else {
-          setError(enhancementData.error || 'Failed to enhance image.');
+          setError(creationData.error || 'Failed to fetch creation details.');
         }
       } else {
-        setError(storyData.error || 'Failed to generate story.');
+        setError(uploadData.error || 'Upload failed');
       }
     } catch (err) {
-      console.error('Error during story or enhancement generation:', err);
+      console.error('Error during processing:', err);
       setError('An error occurred during processing: ' + err.message);
     } finally {
       setLoading(false);
@@ -97,19 +152,14 @@ export default function Home() {
       case 'input':
         return (
           <UploadForm
-            onUploadComplete={handleUploadAndDescribeComplete}
-            setLoading={setLoading}
+            onGenerateClick={handleGenerateClick}
             setError={setError}
-            uploadedFileData={uploadedFileData}
-            setUploadedFileData={setUploadedFileData}
           />
         );
       case 'output':
         return (
           <CombinedOutputDisplay
-            originalImage={uploadedImage}
-            enhancedImage={enhancedImage}
-            storyResult={storyResult}
+            creation={uploadedFileData} // Pass the full creation object
             resetApp={resetApp}
           />
         );
@@ -130,6 +180,20 @@ export default function Home() {
           <div className="hero-container fade-in-up">
             <div className="hero-title">Drawing to Animation Studio</div>
             <div className="hero-subtitle">Transform your static drawings into captivating animations in just a few clicks.</div>
+            <button
+              onClick={handleLogout}
+              className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+            >
+              <LogOut size={18} />
+              <span>Logout</span>
+            </button>
+            <button
+              onClick={() => router.push('/my-creations')}
+              className="absolute top-4 right-28 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 flex items-center space-x-2"
+            >
+              <BookOpen size={18} />
+              <span>My Creations</span>
+            </button>
           </div>
 
           <main className="max-w-4xl mx-auto">

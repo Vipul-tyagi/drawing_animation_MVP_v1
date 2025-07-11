@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 
-export default function UploadForm({ onUploadComplete, setLoading, setError, uploadedFileData, setUploadedFileData }) {
+export default function UploadForm({ onGenerateClick, setError }) {
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
@@ -54,51 +54,11 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
     setSelectedFile(file);
   };
 
-  const uploadFile = async () => {
-    setLoading(true);
-    setError(null);
-
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('story', story);
-    console.log('UploadForm: FormData before sending:', Object.fromEntries(formData.entries()));
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      console.log('Upload API response status:', response.status);
-
-      const data = await response.json();
-      console.log('Upload API response data:', data);
-      
-      if (data.success) {
-        const newUploadedFileData = {
-          ...data,
-          url: data.url,
-          story: story,
-        };
-        setUploadedFileData(newUploadedFileData); // Update state in parent
-        console.log('UploadForm: File uploaded and data stored.');
-        onUploadComplete(newUploadedFileData);
-      } else {
-        setError(data.error || 'Upload failed');
-        console.error('UploadForm: Upload failed with error:', data.error);
-      }
-    } catch (error) {
-      setError('UploadForm: Upload fetch error:' + error.message);
-      console.error('UploadForm: Upload fetch error:', error);
-    } finally {
-      setLoading(false);
-      console.log('UploadForm: Upload process finished.');
-    }
-  };
+  
 
   const handleGenerateStoryClick = () => {
     if (selectedFile) {
-      uploadFile();
+      onGenerateClick(selectedFile, story);
     }
   };
 
@@ -118,10 +78,11 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
             <button
               onClick={() => {
                 setPreview(null);
+                setSelectedFile(null);
                 if (fileInputRef.current) {
                   fileInputRef.current.value = '';
                 }
-                console.log('UploadForm: Cleared preview.');
+                console.log('UploadForm: Cleared preview and selected file.');
               }}
               className="text-blue-500 hover:text-blue-700 font-medium transition duration-150 ease-in-out"
             >
@@ -130,37 +91,39 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
           </div>
         )}
 
-        {/* Upload Zone (Always Visible) */}
-        <div
-          className={`relative border-2 border-dashed rounded-lg p-10 text-center transition-colors duration-200 ease-in-out
-            ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-50'}
-          `}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-        >
-          <input
-            type="file"
-            ref={fileInputRef}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            onChange={handleChange}
-            accept="image/*"
-          />
-          <div className="flex flex-col items-center justify-center">
-            <svg className="w-8 h-8 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-            <p className="text-lg text-gray-600 mb-2">Drag and drop your drawing here</p>
-            <p className="text-gray-500 mb-4">or</p>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 ease-in-out shadow-md"
-            >
-              Browse Files
-            </button>
-            <p className="text-sm text-gray-400 mt-3">Supports JPG, PNG up to 5MB</p>
+        {/* Upload Zone (Conditional) */}
+        {!preview && (
+          <div
+            className={`relative border-2 border-dashed rounded-lg p-8 sm:p-10 text-center transition-colors duration-200 ease-in-out
+              ${dragActive ? 'border-primary bg-primary/5' : 'border-neutral-300 bg-neutral-50'}
+            `}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              onChange={handleChange}
+              accept="image/*"
+            />
+            <div className="flex flex-col items-center justify-center">
+              <svg className="w-12 h-12 text-neutral-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+              <p className="text-lg text-neutral-700 mb-2 font-sans">Drag and drop your drawing here</p>
+              <p className="text-neutral-500 mb-4 font-sans">or</p>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-6 rounded-full transition duration-300 ease-in-out shadow-md font-sans"
+              >
+                Browse Files
+              </button>
+              <p className="text-sm text-neutral-400 mt-3 font-sans">Supports JPG, PNG up to 5MB</p>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Story Input (Always Visible, below upload) */}
         <div className="mt-6 p-4 border border-gray-200 rounded-lg">

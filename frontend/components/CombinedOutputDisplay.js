@@ -3,11 +3,10 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
 export default function CombinedOutputDisplay({
-  originalImage,
-  enhancedImage,
-  storyResult,
+  creation,
   resetApp,
 }) {
+  const { originalImageUrl, enhancedImageUrl, bedtimeStoryText } = creation || {};
   const contentRef = useRef(null);
 
   const handleDownloadPdf = async () => {
@@ -42,9 +41,9 @@ export default function CombinedOutputDisplay({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Original Drawing</h3>
-            {originalImage && (
+            {originalImageUrl && (
               <img
-                src={originalImage.url}
+                src={originalImageUrl}
                 alt="Original Drawing"
                 className="max-w-full h-auto rounded-lg mx-auto shadow-lg border border-gray-200"
               />
@@ -52,9 +51,9 @@ export default function CombinedOutputDisplay({
           </div>
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Enhanced Drawing</h3>
-            {enhancedImage ? (
+            {enhancedImageUrl ? (
               <img
-                src={enhancedImage.url}
+                src={enhancedImageUrl}
                 alt="Enhanced Drawing"
                 className="max-w-full h-auto rounded-lg mx-auto shadow-lg border border-gray-200"
               />
@@ -69,9 +68,9 @@ export default function CombinedOutputDisplay({
         {/* Story Section */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-700 mb-2">Your Bedtime Story:</h3>
-          {storyResult && (
+          {bedtimeStoryText && (
             <div className="bg-gray-100 p-6 rounded-lg shadow-inner max-h-96 overflow-y-auto border border-gray-200">
-              <p className="text-lg leading-relaxed whitespace-pre-wrap">{storyResult}</p>
+              <p className="text-lg leading-relaxed whitespace-pre-wrap">{bedtimeStoryText}</p>
             </div>
           )}
         </div>
@@ -90,6 +89,12 @@ export default function CombinedOutputDisplay({
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
         >
           Download My Masterpiece (PDF)
+        </button>
+        <button
+          onClick={() => console.log('Psychological Assessment button clicked')}
+          className="bg-purple-600 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          Unlock Deeper Insights: Get a Comprehensive Psychological Assessment
         </button>
       </div>
     </div>
