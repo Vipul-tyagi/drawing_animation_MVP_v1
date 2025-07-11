@@ -276,7 +276,7 @@ export default function Home() {
                   transition={{ delay: 0.2 }}
                 >
                   👋 Welcome back, {userStats.userName}!
-                </p>
+                </motion.p>
                 <motion.p 
                   className="text-xs text-neutral-600 dark:text-neutral-400"
                   initial={{ opacity: 0, y: -5 }}
