@@ -17,19 +17,19 @@ module.exports = {
     },
     extend: {
       colors: {
-        // Apple-inspired semantic color system
+        // Magical, joyful color palette for families
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          DEFAULT: '#3b82f6',
+          50: '#fef7ff',
+          100: '#fdeeff',
+          200: '#fcdcff',
+          300: '#f9b9ff',
+          400: '#f485ff',
+          500: '#ed4eff',
+          600: '#d926aa',
+          700: '#b91c7c',
+          800: '#9a1b5e',
+          900: '#7e1a4f',
+          DEFAULT: '#ed4eff',
         },
         secondary: {
           50: '#f0f9ff',
@@ -42,8 +42,27 @@ module.exports = {
           700: '#0369a1',
           800: '#075985',
           900: '#0c4a6e',
-          DEFAULT: '#0ea5e9',
+          DEFAULT: '#38bdf8',
         },
+        // Rainbow colors for magical effects
+        rainbow: {
+          red: '#ff6b6b',
+          orange: '#ffa726',
+          yellow: '#ffeb3b',
+          green: '#66bb6a',
+          blue: '#42a5f5',
+          indigo: '#7986cb',
+          purple: '#ab47bc',
+        },
+        // Playful accent colors
+        sunshine: '#ffeb3b',
+        bubblegum: '#ff69b4',
+        mint: '#98fb98',
+        lavender: '#e6e6fa',
+        peach: '#ffcccb',
+        sky: '#87ceeb',
+        grass: '#90ee90',
+        // Neutral colors with warmth
         neutral: {
           50: '#fafafa',
           100: '#f5f5f5',
@@ -75,35 +94,22 @@ module.exports = {
           600: '#dc2626',
           DEFAULT: '#ef4444',
         },
-        // Glass morphism colors
-        glass: {
-          light: 'rgba(255, 255, 255, 0.1)',
-          dark: 'rgba(0, 0, 0, 0.2)',
-          border: 'rgba(255, 255, 255, 0.2)',
-          'border-dark': 'rgba(255, 255, 255, 0.1)',
-        }
       },
       fontFamily: {
         sans: [
+          'Comic Neue',
+          'Fredoka One',
+          'Nunito',
           '-apple-system',
           'BlinkMacSystemFont',
-          'SF Pro Display',
           'Segoe UI',
           'Roboto',
-          'Helvetica Neue',
-          'Arial',
           'sans-serif'
         ],
-        mono: [
-          'SF Mono',
-          'Monaco',
-          'Inconsolata',
-          'Roboto Mono',
-          'monospace'
-        ],
+        display: ['Fredoka One', 'Comic Neue', 'cursive'],
+        body: ['Nunito', 'Comic Neue', 'sans-serif'],
       },
       fontSize: {
-        // Apple Typography Scale
         'xs': ['0.75rem', { lineHeight: '1rem' }],
         'sm': ['0.875rem', { lineHeight: '1.25rem' }],
         'base': ['1rem', { lineHeight: '1.5rem' }],
@@ -134,54 +140,81 @@ module.exports = {
         '3xl': '64px',
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'fade-in-up': 'fadeInUp 0.6s ease-out',
-        'scale-in': 'scaleIn 0.3s ease-out',
-        'slide-in-right': 'slideInRight 0.4s ease-out',
         'bounce-gentle': 'bounceGentle 2s infinite',
-        'pulse-gentle': 'pulseGentle 2s infinite',
+        'wiggle': 'wiggle 1s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
+        'rainbow': 'rainbow 3s linear infinite',
+        'sparkle': 'sparkle 1.5s ease-in-out infinite',
+        'pulse-rainbow': 'pulseRainbow 2s ease-in-out infinite',
+        'slide-up': 'slideUp 0.5s ease-out',
+        'slide-down': 'slideDown 0.5s ease-out',
+        'zoom-in': 'zoomIn 0.3s ease-out',
+        'heart-beat': 'heartBeat 1.5s ease-in-out infinite',
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        scaleIn: {
-          '0%': { opacity: '0', transform: 'scale(0.9)' },
-          '100%': { opacity: '1', transform: 'scale(1)' },
-        },
-        slideInRight: {
-          '0%': { opacity: '0', transform: 'translateX(20px)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' },
-        },
         bounceGentle: {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
-        pulseGentle: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.8' },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        rainbow: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+        sparkle: {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.5', transform: 'scale(1.2)' },
+        },
+        pulseRainbow: {
+          '0%, 100%': { 
+            backgroundImage: 'linear-gradient(45deg, #ff6b6b, #ffa726, #ffeb3b, #66bb6a, #42a5f5, #7986cb, #ab47bc)',
+            backgroundSize: '400% 400%',
+            backgroundPosition: '0% 50%'
+          },
+          '50%': { 
+            backgroundPosition: '100% 50%'
+          },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideDown: {
+          '0%': { transform: 'translateY(-100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        zoomIn: {
+          '0%': { transform: 'scale(0.8)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        heartBeat: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '14%': { transform: 'scale(1.1)' },
+          '28%': { transform: 'scale(1)' },
+          '42%': { transform: 'scale(1.1)' },
+          '70%': { transform: 'scale(1)' },
         },
       },
       boxShadow: {
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.1)',
-        'glass-dark': '0 8px 32px rgba(0, 0, 0, 0.3)',
-        'elevated': '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        'floating': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        'magical': '0 0 20px rgba(237, 78, 255, 0.3), 0 0 40px rgba(56, 189, 248, 0.2)',
+        'rainbow': '0 0 30px rgba(255, 107, 107, 0.3), 0 0 60px rgba(255, 167, 38, 0.2)',
+        'glow': '0 0 15px rgba(255, 255, 255, 0.5)',
+        'soft': '0 4px 20px rgba(0, 0, 0, 0.1)',
+        'playful': '0 8px 25px rgba(237, 78, 255, 0.15)',
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'gradient-mesh': 'linear-gradient(135deg, var(--tw-gradient-stops))',
+        'rainbow-gradient': 'linear-gradient(45deg, #ff6b6b, #ffa726, #ffeb3b, #66bb6a, #42a5f5, #7986cb, #ab47bc)',
+        'magical-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+        'sunset-gradient': 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%)',
+        'ocean-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       },
     },
   },

@@ -67,19 +67,45 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-blue-900 flex items-center justify-center p-4 relative overflow-hidden">
       <Head>
-        <title>{isRegisterMode ? 'Sign Up' : 'Sign In'} - Drawing to Animation</title>
-        <meta name="description" content="Access your creative studio" />
+        <title>{isRegisterMode ? '🎨 Join the Magic!' : '✨ Welcome Back!'} - Magical Drawing Studio</title>
+        <meta name="description" content="Join thousands of families creating magical stories from drawings!" />
       </Head>
 
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
+        {/* Floating magical elements */}
+        {['✨', '🌟', '💫', '⭐', '🎨', '🌈', '🦄', '🧚‍♀️', '🎭', '📖'].map((emoji, i) => (
+          <motion.div
+            key={i}
+            className="absolute text-4xl"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -50, 0],
+              rotate: [0, 180, 360],
+              scale: [1, 1.3, 1],
+              opacity: [0.3, 0.8, 0.3]
+            }}
+            transition={{
+              duration: 5 + i,
+              delay: i * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            {emoji}
+          </motion.div>
+        ))}
+        
         <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.5, 0.8, 0.5],
           }}
           transition={{
             duration: 8,
@@ -88,10 +114,10 @@ export default function LoginPage() {
           }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary/20 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
-            opacity: [0.2, 0.4, 0.2],
+            opacity: [0.4, 0.7, 0.4],
           }}
           transition={{
             duration: 10,
@@ -102,7 +128,7 @@ export default function LoginPage() {
       </div>
 
       <motion.div
-        className="glass-card w-full max-w-md relative z-10"
+        className="glass-card w-full max-w-lg relative z-10 border-4 border-primary/30"
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
@@ -115,10 +141,20 @@ export default function LoginPage() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
+            <motion.div 
+              className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-3xl flex items-center justify-center shadow-magical"
+              animate={{ 
+                rotate: [0, 10, -10, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <Sparkles className="w-8 h-8 text-white" />
+            </motion.div>
+            <div>
+              <h1 className="text-3xl font-display font-bold rainbow-text">Magical Drawing Studio</h1>
+              <p className="text-sm text-neutral-400 font-medium">Where dreams come to life! ✨</p>
             </div>
-            <h1 className="text-2xl font-bold text-white">Drawing Studio</h1>
           </motion.div>
           
           <motion.div
@@ -126,13 +162,13 @@ export default function LoginPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
           >
-            <h2 className="text-headline text-white mb-2">
-              {isRegisterMode ? 'Create Account' : 'Welcome Back'}
+            <h2 className="text-3xl font-display font-bold text-white mb-3">
+              {isRegisterMode ? '🎨 Join the Magic!' : '✨ Welcome Back!'}
             </h2>
-            <p className="text-body text-neutral-400">
+            <p className="text-lg font-medium text-neutral-300">
               {isRegisterMode 
-                ? 'Join thousands of creators bringing their drawings to life'
-                : 'Sign in to continue your creative journey'
+                ? 'Join thousands of families creating magical stories! 🌟'
+                : 'Ready to create more magical stories? 🚀'
               }
             </p>
           </motion.div>
@@ -142,13 +178,16 @@ export default function LoginPage() {
         <AnimatePresence>
           {error && (
             <motion.div
-              className="mb-6 p-4 bg-error/10 border border-error/20 rounded-xl"
+              className="mb-6 p-4 bg-error/20 border-4 border-error/30 rounded-2xl"
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.3 }}
             >
-              <p className="text-error text-sm font-medium">{error}</p>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">😅</span>
+                <p className="text-error text-base font-bold">{error}</p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -161,8 +200,8 @@ export default function LoginPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.4 }}
           >
-            <label htmlFor="email" className="block text-sm font-medium text-neutral-300 mb-2">
-              Email Address
+            <label htmlFor="email" className="block text-lg font-bold text-neutral-200 mb-3">
+              📧 Email Address
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -171,8 +210,8 @@ export default function LoginPage() {
               <input
                 type="email"
                 id="email"
-                className="input-field pl-10 bg-neutral-800/50 border-neutral-600 text-white placeholder:text-neutral-500"
-                placeholder="Enter your email"
+                className="input-field pl-12 bg-white/10 border-4 border-white/20 text-white placeholder:text-neutral-300 text-lg font-medium rounded-2xl"
+                placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -187,8 +226,8 @@ export default function LoginPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.4 }}
           >
-            <label htmlFor="password" className="block text-sm font-medium text-neutral-300 mb-2">
-              Password
+            <label htmlFor="password" className="block text-lg font-bold text-neutral-200 mb-3">
+              🔒 Password
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -197,8 +236,8 @@ export default function LoginPage() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
-                className="input-field pl-10 pr-10 bg-neutral-800/50 border-neutral-600 text-white placeholder:text-neutral-500"
-                placeholder="Enter your password"
+                className="input-field pl-12 pr-12 bg-white/10 border-4 border-white/20 text-white placeholder:text-neutral-300 text-lg font-medium rounded-2xl"
+                placeholder="Your secret password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -206,14 +245,14 @@ export default function LoginPage() {
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={loading}
               >
                 {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-neutral-400 hover:text-neutral-300" />
+                  <EyeOff className="h-6 w-6 text-neutral-400 hover:text-neutral-300" />
                 ) : (
-                  <Eye className="h-5 w-5 text-neutral-400 hover:text-neutral-300" />
+                  <Eye className="h-6 w-6 text-neutral-400 hover:text-neutral-300" />
                 )}
               </button>
             </div>
@@ -222,7 +261,7 @@ export default function LoginPage() {
           {/* Submit Button */}
           <motion.button
             type="submit"
-            className="w-full btn-primary flex items-center justify-center gap-3 relative overflow-hidden"
+          className="w-full magical-button flex items-center justify-center gap-3 relative overflow-hidden text-xl font-bold py-4"
             disabled={loading}
             whileHover={!loading ? { scale: 1.02 } : {}}
             whileTap={!loading ? { scale: 0.98 } : {}}
@@ -240,11 +279,11 @@ export default function LoginPage() {
                   exit={{ opacity: 0 }}
                 >
                   <motion.div
-                    className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                    className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full"
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   />
-                  {isRegisterMode ? 'Creating Account...' : 'Signing In...'}
+                  {isRegisterMode ? '🎨 Creating Your Magic Account...' : '✨ Signing You In...'}
                 </motion.div>
               ) : (
                 <motion.div
@@ -254,7 +293,8 @@ export default function LoginPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  {isRegisterMode ? 'Create Account' : 'Sign In'}
+                  <span className="text-2xl">{isRegisterMode ? '🎨' : '✨'}</span>
+                  {isRegisterMode ? 'Join the Magic!' : 'Let\'s Create!'}
                   <ArrowRight className="w-4 h-4" />
                 </motion.div>
               )}
@@ -278,45 +318,45 @@ export default function LoginPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7, duration: 0.4 }}
         >
-          <p className="text-neutral-400 text-sm">
-            {isRegisterMode ? 'Already have an account?' : "Don't have an account?"}
+          <p className="text-neutral-300 text-lg font-medium">
+            {isRegisterMode ? 'Already part of our magical family?' : "New to our magical world?"}
           </p>
           <motion.button
             type="button"
             onClick={toggleMode}
-            className="mt-2 text-primary hover:text-primary/80 font-medium transition-colors duration-200"
+            className="mt-3 text-primary hover:text-secondary font-bold text-lg transition-colors duration-200"
             disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            {isRegisterMode ? 'Sign In' : 'Create Account'}
+            {isRegisterMode ? '✨ Sign In Instead' : '🎨 Join the Magic!'}
           </motion.button>
         </motion.div>
 
         {/* Features Preview */}
         <motion.div
-          className="mt-8 pt-6 border-t border-neutral-700"
+          className="mt-8 pt-6 border-t-4 border-white/20"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.4 }}
         >
-          <p className="text-neutral-400 text-xs text-center mb-4">What you'll get:</p>
-          <div className="grid grid-cols-2 gap-4 text-xs">
+          <p className="text-neutral-300 text-lg font-bold text-center mb-6">🌟 What magical features await you:</p>
+          <div className="grid grid-cols-2 gap-4 text-base font-medium">
             <div className="flex items-center gap-2 text-neutral-300">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              AI Story Generation
+              <div className="w-4 h-4 bg-primary rounded-full shadow-magical"></div>
+              🤖 AI Story Magic
             </div>
             <div className="flex items-center gap-2 text-neutral-300">
-              <div className="w-2 h-2 bg-secondary rounded-full"></div>
-              Image Enhancement
+              <div className="w-4 h-4 bg-secondary rounded-full shadow-magical"></div>
+              ✨ Art Enhancement
             </div>
             <div className="flex items-center gap-2 text-neutral-300">
-              <div className="w-2 h-2 bg-success rounded-full"></div>
-              Save Creations
+              <div className="w-4 h-4 bg-success rounded-full shadow-magical"></div>
+              💾 Save Forever
             </div>
             <div className="flex items-center gap-2 text-neutral-300">
-              <div className="w-2 h-2 bg-warning rounded-full"></div>
-              Share & Export
+              <div className="w-4 h-4 bg-warning rounded-full shadow-magical"></div>
+              📤 Share Joy
             </div>
           </div>
         </motion.div>

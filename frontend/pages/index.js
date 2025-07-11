@@ -3,12 +3,13 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
-import { Upload, BookOpen, LogOut, Sparkles, User, Menu, X, HelpCircle } from 'lucide-react';
+import { Upload, BookOpen, LogOut, Sparkles, User, Menu, X, HelpCircle, Heart } from 'lucide-react';
 
-import EnhancedUploadForm from '../components/EnhancedUploadForm';
-import CombinedOutputDisplay from '../components/CombinedOutputDisplay';
-import LoadingSpinner from '../components/LoadingSpinner';
+import JoyfulUploadForm from '../components/JoyfulUploadForm';
+import MagicalOutputDisplay from '../components/MagicalOutputDisplay';
+import MagicalLoadingSpinner from '../components/MagicalLoadingSpinner';
 import ThemeToggle from '../components/ThemeToggle';
+import OnboardingFlow from '../components/OnboardingFlow';
 import OnboardingFlow from '../components/OnboardingFlow';
 import SmartErrorBoundary from '../components/SmartErrorBoundary';
 import { NotificationProvider } from '../components/SmartNotifications';
@@ -95,6 +96,8 @@ export default function Home() {
   const [processingMessage, setProcessingMessage] = useState('');
   const [progress, setProgress] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   
@@ -283,14 +286,14 @@ export default function Home() {
     switch (currentPhase) {
       case 'input':
         return (
-          <EnhancedUploadForm
+          <JoyfulUploadForm
             onGenerateClick={handleGenerateClick}
             setError={setError}
           />
         );
       case 'output':
         return (
-          <CombinedOutputDisplay
+          <MagicalOutputDisplay
             creation={uploadedFileData}
             resetApp={resetApp}
           />
@@ -304,15 +307,15 @@ export default function Home() {
     <NotificationProvider>
       <SmartErrorBoundary>
       <Head>
-        <title>Drawing to Animation Studio</title>
-        <meta name="description" content="Transform your drawings into magical stories with AI" />
+        <title>🎨 Magical Drawing Studio - Create Amazing Stories! ✨</title>
+        <meta name="description" content="Transform your child's drawings into magical bedtime stories with AI! Fun, safe, and educational for the whole family." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300" {...swipeHandlers}>
         {/* Navigation Header */}
         <motion.header
-          className="sticky top-0 z-50 glass-surface border-b border-neutral-200/50 dark:border-neutral-700/50"
+          className="sticky top-0 z-50 glass-surface border-b-4 border-primary/20"
           initial={{ y: -100 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
@@ -322,27 +325,49 @@ export default function Home() {
               {/* Logo */}
               <motion.div
                 className="flex items-center gap-3"
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
+                <motion.div 
+                  className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-3xl flex items-center justify-center shadow-magical"
+                  animate={{ 
+                    rotate: [0, 5, -5, 0],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <Sparkles className="w-6 h-6 text-white" />
+                </motion.div>
+                <div>
+                  <h1 className="text-2xl font-display font-bold rainbow-text">
+                    Magical Drawing Studio
+                  </h1>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">
+                    Where drawings come to life! ✨
+                  </p>
                 </div>
-                <h1 className="text-xl font-bold text-neutral-800 dark:text-neutral-100">
-                  Drawing Studio
-                </h1>
               </motion.div>
 
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center gap-6">
                 <motion.button
                   onClick={() => router.push('/my-creations')}
-                  className="btn-ghost flex items-center gap-2"
+                  className="btn-ghost flex items-center gap-2 font-bold"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <BookOpen size={18} />
-                  My Creations
+                  📚 My Stories
+                </motion.button>
+                
+                <motion.button
+                  onClick={() => setShowHelp(true)}
+                  className="btn-ghost flex items-center gap-2 font-bold"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <HelpCircle size={18} />
+                  🆘 Help
                 </motion.button>
                 
                 <motion.button
@@ -359,18 +384,18 @@ export default function Home() {
                 
                 <motion.button
                   onClick={handleLogout}
-                  className="btn-ghost flex items-center gap-2 text-error hover:bg-error/10"
+                  className="btn-ghost flex items-center gap-2 text-error hover:bg-error/10 font-bold"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <LogOut size={18} />
-                  Logout
+                  👋 Bye!
                 </motion.button>
               </nav>
 
               {/* Mobile Menu Button */}
               <motion.button
-                className="md:hidden p-2 rounded-xl glass-surface"
+                className="md:hidden p-3 rounded-2xl glass-surface border-2 border-primary/30"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 whileTap={{ scale: 0.95 }}
               >
@@ -383,7 +408,7 @@ export default function Home() {
           <AnimatePresence>
             {mobileMenuOpen && (
               <motion.div
-                className="md:hidden glass-surface border-t border-neutral-200/50 dark:border-neutral-700/50"
+                className="md:hidden glass-surface border-t-4 border-primary/20"
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
@@ -395,10 +420,21 @@ export default function Home() {
                       router.push('/my-creations');
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full btn-ghost flex items-center gap-3 justify-start"
+                    className="w-full btn-ghost flex items-center gap-3 justify-start font-bold text-lg"
                   >
                     <BookOpen size={18} />
-                    My Creations
+                    📚 My Stories
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setShowHelp(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full btn-ghost flex items-center gap-3 justify-start font-bold text-lg"
+                  >
+                    <HelpCircle size={18} />
+                    🆘 Help
                   </button>
                   
                   <button
@@ -413,7 +449,7 @@ export default function Home() {
                   </button>
                   
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Theme</span>
+                    <span className="text-lg font-bold">🎨 Theme</span>
                     <ThemeToggle />
                   </div>
                   
@@ -422,10 +458,10 @@ export default function Home() {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full btn-ghost flex items-center gap-3 justify-start text-error hover:bg-error/10"
+                    className="w-full btn-ghost flex items-center gap-3 justify-start text-error hover:bg-error/10 font-bold text-lg"
                   >
                     <LogOut size={18} />
-                    Logout
+                    👋 Bye!
                   </button>
                 </div>
               </motion.div>
@@ -436,33 +472,79 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8">
           {/* Hero Section */}
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-12 relative"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           >
+            {/* Floating magical elements */}
+            <div className="absolute inset-0 pointer-events-none">
+              {['✨', '🌟', '💫', '⭐', '🎨', '🌈', '🦄', '🧚‍♀️'].map((emoji, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute text-4xl"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
+                  animate={{
+                    y: [0, -30, 0],
+                    rotate: [0, 180, 360],
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.8, 0.3]
+                  }}
+                  transition={{
+                    duration: 4,
+                    delay: i * 0.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  {emoji}
+                </motion.div>
+              ))}
+            </div>
+
             <motion.h1
-              className="text-display mb-4 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent"
+              className="text-6xl md:text-8xl font-display font-bold mb-6 rainbow-text relative z-10"
               animate={{ backgroundPosition: ['0%', '100%', '0%'] }}
               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               style={{ backgroundSize: '200% 100%' }}
             >
-              Bring Your Drawings to Life!
+              🎨 Bring Your Drawings to Life! ✨
             </motion.h1>
             <motion.p
-              className="text-body text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto"
+              className="text-2xl font-bold text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto relative z-10"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              Transform your static drawings into captivating stories with the power of AI. 
-              Upload your artwork and watch as we create a magical bedtime story just for you.
+              🌟 Transform your child's drawings into magical bedtime stories with AI! 
+              Upload your artwork and watch the magic happen! 🚀
             </motion.p>
+            
+            <motion.div
+              className="mt-6 flex justify-center gap-4 flex-wrap relative z-10"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              {['Safe for Kids', 'AI Powered', 'Instant Magic', 'Family Fun'].map((feature, i) => (
+                <motion.div
+                  key={feature}
+                  className="px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full border-2 border-primary/30 font-bold text-primary"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
+                >
+                  ✨ {feature}
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
 
           {/* Progress Steps */}
           <motion.div
-            className="glass-card mb-8 max-w-4xl mx-auto"
+            className="glass-card mb-8 max-w-4xl mx-auto border-4 border-primary/20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
@@ -471,7 +553,7 @@ export default function Home() {
               {/* Progress Line */}
               <div className="hidden sm:block absolute left-6 right-6 h-0.5 bg-neutral-200 dark:bg-neutral-700 top-6 -z-10">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
+                  className="h-1 bg-gradient-to-r from-primary to-secondary rounded-full shadow-magical"
                   initial={{ width: '0%' }}
                   animate={{ width: currentPhase === 'output' ? '100%' : '0%' }}
                   transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
@@ -480,7 +562,7 @@ export default function Home() {
 
               <Step
                 icon={<Upload size={24} />}
-                title="Upload & Describe"
+                title="🎨 Upload & Describe"
                 number={1}
                 isActive={currentPhase === 'input'}
                 isCompleted={currentPhase === 'output'}
@@ -489,7 +571,7 @@ export default function Home() {
               
               <Step
                 icon={<BookOpen size={24} />}
-                title="Your Creation"
+                title="📖 Your Magical Story"
                 number={2}
                 isActive={currentPhase === 'output'}
                 isCompleted={false}
@@ -508,19 +590,19 @@ export default function Home() {
             <AnimatePresence>
               {error && (
                 <motion.div
-                  className="mb-6 p-4 glass-surface border border-error/20 rounded-2xl"
+                  className="mb-6 p-6 glass-surface border-4 border-error/30 rounded-3xl"
                   initial={{ opacity: 0, y: -20, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -20, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-error/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-error text-sm">!</span>
+                    <div className="w-8 h-8 bg-error/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-error text-lg">😅</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-error mb-1">Oops! Something went wrong</h4>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400">{error}</p>
+                      <h4 className="font-bold text-error mb-2 text-lg">Oops! Something went wrong! 😅</h4>
+                      <p className="text-base font-medium text-neutral-600 dark:text-neutral-400">{error}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -536,9 +618,9 @@ export default function Home() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.05 }}
                   transition={{ duration: 0.4 }}
-                  className="glass-card"
+                  className="glass-card border-4 border-primary/20"
                 >
-                  <LoadingSpinner message={processingMessage} progress={progress} />
+                  <MagicalLoadingSpinner message={processingMessage} progress={progress} />
                 </motion.div>
               ) : (
                 <motion.div
@@ -556,17 +638,28 @@ export default function Home() {
 
           {/* Footer */}
           <motion.footer
-            className="text-center mt-16 text-neutral-500 dark:text-neutral-400"
+            className="text-center mt-16 text-neutral-500 dark:text-neutral-400 relative"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.5 }}
           >
-            <p className="text-caption">
-              &copy; {new Date().getFullYear()} Drawing to Animation Studio. 
-              Made with ❤️ and AI magic.
-            </p>
+            <motion.div
+              className="inline-flex items-center gap-3 px-6 py-3 glass-surface rounded-full border-2 border-primary/20"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <Heart className="w-5 h-5 text-red-500" />
+              <p className="font-bold text-lg">
+                &copy; {new Date().getFullYear()} Magical Drawing Studio. 
+                Made with 💖 and AI magic for amazing families! ✨
+              </p>
+              <Sparkles className="w-5 h-5 text-primary" />
+            </motion.div>
           </motion.footer>
         </div>
+
+        {/* Onboarding Flow */}
+        <OnboardingFlow onComplete={() => setShowOnboarding(false)} />
 
         {/* Contextual Help */}
         <ContextualTips currentStep={currentPhase} />
@@ -580,10 +673,10 @@ export default function Home() {
         {/* Background Ambient Effects */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
           <motion.div
-            className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
+            className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
+              opacity: [0.5, 0.8, 0.5],
             }}
             transition={{
               duration: 8,
@@ -592,13 +685,27 @@ export default function Home() {
             }}
           />
           <motion.div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"
+            className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"
             animate={{
               scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.4, 0.2],
+              opacity: [0.4, 0.7, 0.4],
             }}
             transition={{
               duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 w-32 h-32 bg-yellow-400/20 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.3, 0.6, 0.3],
+              x: [-50, 50, -50],
+              y: [-50, 50, -50]
+            }}
+            transition={{
+              duration: 6,
               repeat: Infinity,
               ease: "easeInOut"
             }}
