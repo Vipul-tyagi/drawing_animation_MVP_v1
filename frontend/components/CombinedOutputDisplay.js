@@ -12,14 +12,27 @@ export default function CombinedOutputDisplay({ creation, resetApp }) {
     if (!contentRef.current) return;
     
     try {
+      // Wait a bit to ensure all images are loaded
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       const canvas = await html2canvas(contentRef.current, {
         scale: 2,
         useCORS: true,
+        allowTaint: true,
         backgroundColor: '#ffffff',
         logging: false,
+        width: contentRef.current.scrollWidth,
+        height: contentRef.current.scrollHeight,
+        scrollX: 0,
+        scrollY: 0,
       });
 
       const imgData = canvas.toDataURL('image/png');
+      
+      if (!imgData || imgData === 'data:,') {
+        throw new Error('Failed to capture content');
+      }
+      
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
@@ -30,10 +43,18 @@ export default function CombinedOutputDisplay({ creation, resetApp }) {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      // Ensure the content fits on the page
+      if (pdfHeight > pdf.internal.pageSize.getHeight()) {
+        const ratio = pdf.internal.pageSize.getHeight() / pdfHeight;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth * ratio, pdf.internal.pageSize.getHeight());
+      } else {
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      }
+      
       pdf.save('your_masterpiece.pdf');
     } catch (error) {
       console.error('PDF generation failed:', error);
+      alert('Sorry, PDF generation failed. Please try again or contact support.');
     }
   };
 
