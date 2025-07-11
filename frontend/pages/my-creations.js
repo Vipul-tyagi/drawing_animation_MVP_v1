@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Download, Eye, Sparkles, Calendar, FileText, Image as ImageIcon, Plus } from 'lucide-react';
 
 import LoadingSpinner from '../components/LoadingSpinner';
+import MagicalLoadingSpinner from '../components/MagicalLoadingSpinner';
 import ThemeToggle from '../components/ThemeToggle';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 
