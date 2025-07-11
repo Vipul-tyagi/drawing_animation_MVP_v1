@@ -3,14 +3,19 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
-import { Upload, BookOpen, LogOut, Sparkles, User, Menu, X } from 'lucide-react';
+import { Upload, BookOpen, LogOut, Sparkles, User, Menu, X, HelpCircle } from 'lucide-react';
 
-import UploadForm from '../components/UploadForm';
+import EnhancedUploadForm from '../components/EnhancedUploadForm';
 import CombinedOutputDisplay from '../components/CombinedOutputDisplay';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ThemeToggle from '../components/ThemeToggle';
+import OnboardingFlow from '../components/OnboardingFlow';
+import SmartErrorBoundary from '../components/SmartErrorBoundary';
+import { NotificationProvider } from '../components/SmartNotifications';
+import { ContextualTips, HelpCenter } from '../components/ContextualHelp';
 import { useTheme } from '../hooks/useTheme';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
+import { usePerformanceMonitor } from '../components/PerformanceMonitor';
 
 const Step = ({ icon, title, number, isActive, isCompleted, onClick }) => (
   <motion.div
@@ -90,10 +95,20 @@ export default function Home() {
   const [processingMessage, setProcessingMessage] = useState('');
   const [progress, setProgress] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   
   const router = useRouter();
   const { isDark } = useTheme();
   const haptic = useHapticFeedback();
+  const { markStart, markEnd, reportCustomMetric } = usePerformanceMonitor();
+
+  useEffect(() => {
+    markStart('page_load');
+    return () => {
+      markEnd('page_load');
+    };
+  }, []);
 
   // Swipe gestures for mobile navigation
   const swipeHandlers = useSwipeable({
@@ -268,7 +283,7 @@ export default function Home() {
     switch (currentPhase) {
       case 'input':
         return (
-          <UploadForm
+          <EnhancedUploadForm
             onGenerateClick={handleGenerateClick}
             setError={setError}
           />
@@ -286,7 +301,8 @@ export default function Home() {
   };
 
   return (
-    <>
+    <NotificationProvider>
+      <SmartErrorBoundary>
       <Head>
         <title>Drawing to Animation Studio</title>
         <meta name="description" content="Transform your drawings into magical stories with AI" />
@@ -327,6 +343,16 @@ export default function Home() {
                 >
                   <BookOpen size={18} />
                   My Creations
+                </motion.button>
+                
+                <motion.button
+                  onClick={() => setShowHelp(true)}
+                  className="btn-ghost flex items-center gap-2"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <HelpCircle size={18} />
+                  Help
                 </motion.button>
                 
                 <ThemeToggle />
@@ -373,6 +399,17 @@ export default function Home() {
                   >
                     <BookOpen size={18} />
                     My Creations
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setShowHelp(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full btn-ghost flex items-center gap-3 justify-start"
+                  >
+                    <HelpCircle size={18} />
+                    Help
                   </button>
                   
                   <div className="flex items-center justify-between">
@@ -531,6 +568,15 @@ export default function Home() {
           </motion.footer>
         </div>
 
+        {/* Contextual Help */}
+        <ContextualTips currentStep={currentPhase} />
+        
+        {/* Help Center */}
+        <HelpCenter isOpen={showHelp} onClose={() => setShowHelp(false)} />
+        
+        {/* Onboarding Flow */}
+        <OnboardingFlow onComplete={() => setShowOnboarding(false)} />
+
         {/* Background Ambient Effects */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
           <motion.div
@@ -559,6 +605,7 @@ export default function Home() {
           />
         </div>
       </div>
-    </>
+      </SmartErrorBoundary>
+    </NotificationProvider>
   );
 }

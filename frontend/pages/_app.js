@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from '../hooks/useTheme';
+import SmartErrorBoundary from '../components/SmartErrorBoundary';
+import { usePerformanceMonitor } from '../components/PerformanceMonitor';
 import Head from 'next/head';
 
 function MyApp({ Component, pageProps }) {
@@ -10,6 +12,7 @@ function MyApp({ Component, pageProps }) {
   const [authToken, setAuthToken] = useState(null);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { reportCustomMetric } = usePerformanceMonitor();
 
   useEffect(() => {
     // Load token from localStorage on initial mount
@@ -20,6 +23,8 @@ function MyApp({ Component, pageProps }) {
     // Simulate initial loading
     const timer = setTimeout(() => {
       setIsLoading(false);
+      // Report app initialization time
+      reportCustomMetric('app_initialization_time', Date.now() - window.performance.timeOrigin);
     }, 1000);
     
     return () => clearTimeout(timer);
@@ -123,6 +128,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ThemeProvider>
+      <SmartErrorBoundary>
       <Head>
         <title>Drawing to Animation Studio</title>
         <meta name="description" content="Transform your drawings into magical stories with AI" />
@@ -153,6 +159,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </motion.div>
       </AnimatePresence>
+      </SmartErrorBoundary>
     </ThemeProvider>
   );
 }
