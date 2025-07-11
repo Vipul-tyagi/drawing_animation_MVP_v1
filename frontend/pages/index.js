@@ -183,8 +183,28 @@ export default function Home() {
       </Head>
       <div className="min-h-screen bg-neutral-900 text-neutral-200 font-sans">
         <div className="container mx-auto px-4 py-8 sm:py-12">
+          <header className="flex justify-between items-center py-4 px-6 bg-neutral-800 rounded-lg shadow-md mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-primary font-sans">Drawing to Animation</h1>
+            <nav className="flex items-center space-x-4">
+              <button
+                onClick={() => router.push('/my-creations')}
+                className="flex items-center text-neutral-200 hover:text-primary transition-colors duration-200 font-medium"
+              >
+                <BookOpen size={20} className="mr-1" />
+                My Creations
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center text-neutral-200 hover:text-red-500 transition-colors duration-200 font-medium"
+              >
+                <LogOut size={20} className="mr-1" />
+                Logout
+              </button>
+            </nav>
+          </header>
+
           <div className="hero-container fade-in-up bg-gradient-to-br from-primary to-secondary p-6 sm:p-8 rounded-lg text-center mb-8 shadow-xl">
-            <h1 className="hero-title text-3xl sm:text-4xl font-bold mb-2 text-white font-sans">Drawing to Animation Studio</h1>
+            <h1 className="hero-title text-3xl sm:text-4xl font-bold mb-2 text-white font-sans">Bring Your Drawings to Life!</h1>
             <p className="hero-subtitle text-base sm:text-lg font-light mb-4 text-white/90 font-sans">Transform your static drawings into captivating animations in just a few clicks.</p>
           </div>
 

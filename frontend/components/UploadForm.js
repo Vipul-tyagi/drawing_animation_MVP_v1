@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react';
 
-export default function UploadForm({ onUploadComplete, setLoading, setError, uploadedFileData, setUploadedFileData }) {
+export default function UploadForm({ onGenerateClick, setError }) {
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
   const [story, setStory] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -50,55 +51,15 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
     reader.onload = (e) => setPreview(e.target.result);
     reader.readAsDataURL(file);
 
-    // Upload file
-    uploadFile(file);
+    setSelectedFile(file);
   };
 
-  const uploadFile = async (file) => {
-    setLoading(true);
-    setError(null);
-    // setUploadedFileData(null); // Clear previous data - this is now handled by parent
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('story', story);
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      console.log('Upload API response status:', response.status);
-
-      const data = await response.json();
-      console.log('Upload API response data:', data);
-      
-      if (data.success) {
-        const newUploadedFileData = {
-          ...data,
-          url: `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}${data.url}`,
-          story: story,
-        };
-        setUploadedFileData(newUploadedFileData); // Update state in parent
-        console.log('UploadForm: File uploaded and data stored.');
-      } else {
-        setError(data.error || 'Upload failed');
-        console.error('UploadForm: Upload failed with error:', data.error);
-      }
-    } catch (error) {
-      setError('UploadForm: Upload fetch error:' + error.message);
-      console.error('UploadForm: Upload fetch error:', error);
-    } finally {
-      setLoading(false);
-      console.log('UploadForm: Upload process finished.');
-    }
-  };
+  
 
   const handleGenerateStoryClick = () => {
     // uploadedFileData is now a prop from parent
-    if (uploadedFileData) {
-      onUploadComplete(uploadedFileData);
+    if (selectedFile) {
+      onGenerateClick(selectedFile, story);
     }
   };
 
@@ -118,10 +79,11 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
             <button
               onClick={() => {
                 setPreview(null);
+                setSelectedFile(null);
                 if (fileInputRef.current) {
                   fileInputRef.current.value = '';
-                }
                 console.log('UploadForm: Cleared preview.');
+                }
               }}
               className="text-blue-500 hover:text-blue-700 font-medium transition duration-150 ease-in-out"
             >
@@ -189,8 +151,8 @@ export default function UploadForm({ onUploadComplete, setLoading, setError, upl
           <div className="text-center mt-6">
           <button
             onClick={handleGenerateStoryClick}
-            disabled={!uploadedFileData}
-            className={`bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 ${!uploadedFileData ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!selectedFile}
+            className={`bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 ${!selectedFile ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Bring My Drawing to Life!
           </button>

@@ -27,6 +27,10 @@ function MyApp({ Component, pageProps }) {
     }
   }, [router.pathname, authToken, isAuthChecked]); // Re-run effect when route or token changes
 
+  if (!isAuthChecked) {
+    return null; // Or a loading spinner
+  }
+
   return <Component {...pageProps} />;
 }
 
