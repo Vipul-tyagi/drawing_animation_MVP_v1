@@ -10,7 +10,6 @@ import MagicalOutputDisplay from '../components/MagicalOutputDisplay';
 import MagicalLoadingSpinner from '../components/MagicalLoadingSpinner';
 import ThemeToggle from '../components/ThemeToggle';
 import OnboardingFlow from '../components/OnboardingFlow';
-import OnboardingFlow from '../components/OnboardingFlow';
 import SmartErrorBoundary from '../components/SmartErrorBoundary';
 import { NotificationProvider } from '../components/SmartNotifications';
 import { ContextualTips, HelpCenter } from '../components/ContextualHelp';
