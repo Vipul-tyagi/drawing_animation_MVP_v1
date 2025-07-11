@@ -97,8 +97,6 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   
   const router = useRouter();
   const { isDark } = useTheme();
