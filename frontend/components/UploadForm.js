@@ -91,14 +91,9 @@ export default function UploadForm({ onGenerateClick, setError }) {
           >
             {/* Header */}
             <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-3 mb-4">
-                <div className="p-3 bg-gradient-to-br from-primary to-secondary rounded-xl">
-                  <Upload className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-headline text-neutral-800 dark:text-neutral-100">
-                  Upload Your Drawing 🎨
-                </h2>
-              </div>
+              <h2 className="text-headline text-neutral-800 dark:text-neutral-100 mb-4">
+                Upload Your Drawing 🎨
+              </h2>
               <p className="text-body text-neutral-600 dark:text-neutral-400">
                 Upload a drawing to create a magical bedtime story!
               </p>
@@ -150,7 +145,6 @@ export default function UploadForm({ onGenerateClick, setError }) {
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
             >
               <input
                 type="file"
@@ -162,16 +156,6 @@ export default function UploadForm({ onGenerateClick, setError }) {
               />
               
               <div className="flex flex-col items-center justify-center">
-                <div className={`
-                  p-4 rounded-xl mb-4 transition-colors duration-300
-                  ${dragActive 
-                    ? 'bg-primary text-white' 
-                    : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400'
-                  }
-                `}>
-                  <Upload className="w-8 h-8" />
-                </div>
-                
                 <h3 className="text-lg font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                   {dragActive ? 'Drop your drawing here!' : 'Drag and drop your drawing here'}
                 </h3>
@@ -179,6 +163,29 @@ export default function UploadForm({ onGenerateClick, setError }) {
                 <p className="text-neutral-500 dark:text-neutral-400 mb-4">
                   or
                 </p>
+                
+                {/* Upload Icon and Choose File Button - Aligned */}
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`
+                    p-3 rounded-xl transition-colors duration-300
+                    ${dragActive 
+                      ? 'bg-primary text-white' 
+                      : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400'
+                    }
+                  `}>
+                    <Upload className="w-6 h-6" />
+                  </div>
+                  
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isProcessing}
+                    className="btn-primary text-lg px-6 py-3 flex items-center gap-2"
+                  >
+                    <Camera className="w-5 h-5" />
+                    Choose File
+                  </button>
+                </div>
                 
                 <p className="text-caption mt-3">
                   Supports JPG, PNG up to 5MB
