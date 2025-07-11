@@ -150,6 +150,7 @@ export default function UploadForm({ onGenerateClick, setError }) {
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
             >
               <input
                 type="file"
@@ -178,16 +179,6 @@ export default function UploadForm({ onGenerateClick, setError }) {
                 <p className="text-neutral-500 dark:text-neutral-400 mb-4">
                   or
                 </p>
-                
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="btn-primary flex items-center gap-2"
-                  disabled={isProcessing}
-                >
-                  <Camera className="w-4 h-4" />
-                  Browse Files
-                </button>
                 
                 <p className="text-caption mt-3">
                   Supports JPG, PNG up to 5MB
