@@ -2,9 +2,9 @@
   "name": "drawing-animation-frontend",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "cd frontend && next dev",
+    "build": "cd frontend && next build",
+    "start": "cd frontend && next start"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
