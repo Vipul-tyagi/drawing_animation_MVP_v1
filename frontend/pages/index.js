@@ -284,7 +284,7 @@ export default function Home() {
                   transition={{ delay: 0.4 }}
                 >
                   🎨 You've created {userStats.totalCreations} magical {userStats.totalCreations === 1 ? 'story' : 'stories'}!
-                </p>
+                </motion.p>
               </div>
             </div>
 
