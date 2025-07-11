@@ -38,8 +38,37 @@ export default function Home() {
   const [processingMessage, setProcessingMessage] = useState('');
   const [progress, setProgress] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userStats, setUserStats] = useState({ totalCreations: 0, userName: '' });
   
   const router = useRouter();
+
+  // Fetch user stats on component mount
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      try {
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) return;
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/creations/my-creations`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          },
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setUserStats({
+            totalCreations: data.creations.length,
+            userName: 'Artist' // You can extract from JWT token or add to API response
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching user stats:', err);
+      }
+    };
+
+    fetchUserStats();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -229,12 +258,32 @@ export default function Home() {
             {/* Desktop Navigation */}
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
-                  Ready to create magic? ✨
+              <motion.button
+                onClick={() => router.push('/my-creations')}
+                className="btn-ghost flex items-center gap-2 text-sm font-medium"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <BookOpen size={16} className="text-primary" />
+                <span className="text-primary font-bold">📚 My Stories</span>
+              </motion.button>
+              
+              <div className="text-right border-l border-neutral-200 dark:border-neutral-700 pl-4">
+                <motion.p 
+                  className="text-sm font-bold text-primary"
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  👋 Welcome back, {userStats.userName}!
                 </p>
-                <p className="text-xs text-neutral-500">
-                  Upload your drawing below!
+                <motion.p 
+                  className="text-xs text-neutral-600 dark:text-neutral-400"
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  🎨 You've created {userStats.totalCreations} magical {userStats.totalCreations === 1 ? 'story' : 'stories'}!
                 </p>
               </div>
             </div>
@@ -266,19 +315,30 @@ export default function Home() {
                     className="w-full btn-ghost flex items-center gap-2 justify-start"
                   >
                     <BookOpen size={16} />
-                    My Stories
+                    📚 My Stories ({userStats.totalCreations})
                   </button>
                   
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full btn-ghost flex items-center gap-2 justify-start text-error"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
+                  <div className="w-full px-3 py-2 text-left">
+                    <p className="text-sm font-bold text-primary">
+                      👋 Welcome back, {userStats.userName}!
+                    </p>
+                    <p className="text-xs text-neutral-500">
+                      🎨 {userStats.totalCreations} magical {userStats.totalCreations === 1 ? 'story' : 'stories'} created
+                    </p>
+                  </div>
+                  
+                  <div className="border-t border-neutral-200 dark:border-neutral-700 pt-2">
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full btn-ghost flex items-center gap-2 justify-start text-error"
+                    >
+                      <LogOut size={16} />
+                      👋 Bye!
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             )}
