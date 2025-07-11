@@ -4,12 +4,12 @@ const storyService = require('../services/storyService');
 
 router.post('/', async (req, res) => {
   try {
-    const { imageId, drawingDescription } = req.body;
-    if (!imageId) {
-      return res.status(400).json({ success: false, error: 'Image ID is required.' });
+    const { imageId, drawingDescription, s3Key } = req.body;
+    if (!imageId || !s3Key) {
+      return res.status(400).json({ success: false, error: 'Image ID and S3 Key are required.' });
     }
 
-    const storyResult = await storyService.generateStory(imageId, drawingDescription);
+    const storyResult = await storyService.generateStory(imageId, drawingDescription, s3Key);
     res.json({ success: true, story: storyResult });
   } catch (error) {
     console.error('Error generating story:', error);

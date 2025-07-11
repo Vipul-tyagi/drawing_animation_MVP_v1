@@ -6,6 +6,9 @@ require('dotenv').config();
 const uploadRoutes = require('./routes/upload');
 const enhanceRoutes = require('./routes/enhance');
 const storyRoutes = require('./routes/story');
+const authRoutes = require('./routes/auth');
+const creationsRoutes = require('./routes/creations');
+const authenticateToken = require('./middleware/authMiddleware');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -17,9 +20,11 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Routes
-app.use('/api/upload', uploadRoutes);
-app.use('/api/enhance', enhanceRoutes);
-app.use('/api/story', storyRoutes);
+app.use('/api/upload', authenticateToken, uploadRoutes);
+app.use('/api/enhance', authenticateToken, enhanceRoutes);
+app.use('/api/story', authenticateToken, storyRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/creations', authenticateToken, creationsRoutes);
 
 // Basic root route to confirm backend is running
 app.get('/', (req, res) => {
