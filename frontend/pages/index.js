@@ -227,23 +227,17 @@ export default function Home() {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-4">
-              <button
-                onClick={() => router.push('/my-creations')}
-                className="btn-ghost flex items-center gap-2"
-              >
-                <BookOpen size={16} />
-                My Stories
-              </button>
-              
-              <button
-                onClick={handleLogout}
-                className="btn-ghost flex items-center gap-2 text-error"
-              >
-                <LogOut size={16} />
-                Logout
-              </button>
-            </nav>
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                  Ready to create magic? ✨
+                </p>
+                <p className="text-xs text-neutral-500">
+                  Upload your drawing below!
+                </p>
+              </div>
+            </div>
 
             {/* Mobile Menu Button */}
             <button
