@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 
 const loadingMessages = [
   "Analyzing your drawing... 🎨",
@@ -22,11 +21,8 @@ export default function LoadingSpinner({ message = "", progress = null }) {
   const currentMessage = message || loadingMessages[messageIndex];
 
   return (
-    <motion.div 
+    <div 
       className="flex flex-col items-center justify-center py-12"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
     >
       {/* Simple loading indicator */}
       <div className="relative mb-6">
@@ -63,20 +59,15 @@ export default function LoadingSpinner({ message = "", progress = null }) {
             </div>
           </div>
         ) : (
-          <motion.div
+          <div
             className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
         )}
       </div>
 
       {/* Message */}
-      <motion.div
+      <div
         key={messageIndex}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
         className="text-center"
       >
         <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
@@ -85,7 +76,7 @@ export default function LoadingSpinner({ message = "", progress = null }) {
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           This usually takes 30-60 seconds
         </p>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

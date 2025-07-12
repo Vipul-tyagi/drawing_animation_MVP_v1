@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { RefreshCw, AlertTriangle, Home, MessageCircle } from 'lucide-react';
 
 class SmartErrorBoundary extends React.Component {
@@ -73,20 +72,15 @@ class SmartErrorBoundary extends React.Component {
 
       return (
         <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center p-4">
-          <motion.div
+          <div
             className="glass-card max-w-lg w-full text-center"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }}
           >
             {/* Error Icon */}
-            <motion.div
+            <div
               className="w-16 h-16 mx-auto mb-6 bg-error/10 rounded-full flex items-center justify-center"
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
             >
               <AlertTriangle className="w-8 h-8 text-error" />
-            </motion.div>
+            </div>
 
             {/* Error Message */}
             <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-2">
@@ -120,51 +114,43 @@ class SmartErrorBoundary extends React.Component {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <motion.button
+              <button
                 onClick={this.handleRetry}
                 className="btn-primary flex items-center gap-2"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
                 disabled={this.state.retryCount >= 3}
               >
                 <RefreshCw className="w-4 h-4" />
                 {isChunkError ? 'Refresh Page' : 'Try Again'}
-              </motion.button>
+              </button>
 
-              <motion.button
+              <button
                 onClick={this.handleGoHome}
                 className="btn-secondary flex items-center gap-2"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
                 <Home className="w-4 h-4" />
                 Go Home
-              </motion.button>
+              </button>
 
               {!isChunkError && !isNetworkError && (
-                <motion.button
+                <button
                   onClick={this.handleReportIssue}
                   className="btn-ghost flex items-center gap-2 text-sm"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   <MessageCircle className="w-4 h-4" />
                   Report Issue
-                </motion.button>
+                </button>
               )}
             </div>
 
             {/* Retry Limit Message */}
             {this.state.retryCount >= 3 && (
-              <motion.p
+              <p
                 className="text-sm text-neutral-500 mt-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
               >
                 Maximum retry attempts reached. Please refresh the page or contact support.
-              </motion.p>
+              </p>
             )}
-          </motion.div>
+          </div>
         </div>
       );
     }

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, X, ChevronRight, Lightbulb, Camera, Sparkles } from 'lucide-react';
 
 const HelpTooltip = ({ children, content, position = 'top' }) => {
@@ -23,23 +22,17 @@ const HelpTooltip = ({ children, content, position = 'top' }) => {
         {children}
       </div>
       
-      <AnimatePresence>
-        {isVisible && (
-          <motion.div
+      {isVisible && (
+          <div
             className={`absolute z-50 ${positions[position]}`}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.2 }}
           >
             <div className="glass-surface px-3 py-2 rounded-lg shadow-lg max-w-xs">
               <p className="text-sm text-neutral-700 dark:text-neutral-300">
                 {content}
               </p>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   );
 };
@@ -79,21 +72,14 @@ const ContextualTips = ({ currentStep }) => {
   if (currentTips.length === 0) return null;
 
   return (
-    <motion.div
+    <div
       className="fixed bottom-4 right-4 z-40 max-w-sm"
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 100 }}
-      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
     >
       <div className="space-y-3">
         {currentTips.map((tip, index) => (
-          <motion.div
+          <div
             key={index}
             className="glass-card p-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2 }}
           >
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 mt-0.5">
@@ -111,7 +97,7 @@ const ContextualTips = ({ currentStep }) => {
           </motion.div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -142,20 +128,12 @@ const HelpCenter = ({ isOpen, onClose }) => {
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   return (
-    <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <div
           className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
         >
-          <motion.div
+          <div
             className="glass-card max-w-2xl w-full max-h-[80vh] overflow-y-auto"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -214,36 +192,25 @@ const HelpCenter = ({ isOpen, onClose }) => {
                       <span className="font-medium text-neutral-800 dark:text-neutral-200">
                         {faq.question}
                       </span>
-                      <motion.div
-                        animate={{ rotate: expandedFaq === index ? 90 : 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
+                      <div>
                         <ChevronRight className="w-5 h-5 text-neutral-500" />
-                      </motion.div>
+                      </div>
                     </button>
                     
-                    <AnimatePresence>
-                      {expandedFaq === index && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
+                    {expandedFaq === index && (
+                        <div
+                          className="px-4 pb-4 text-neutral-600 dark:text-neutral-400"
                         >
-                          <div className="px-4 pb-4 text-neutral-600 dark:text-neutral-400">
-                            {faq.answer}
-                          </div>
-                        </motion.div>
+                          {faq.answer}
+                        </div>
                       )}
-                    </AnimatePresence>
                   </div>
                 ))}
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
   );
 };
 

@@ -1,5 +1,4 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertCircle, Info, X, AlertTriangle } from 'lucide-react';
 
 const NotificationContext = createContext();
@@ -38,12 +37,7 @@ const NotificationItem = ({ notification, onDismiss }) => {
   }, [notification, onDismiss]);
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: -50, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -50, scale: 0.9 }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+    <div
       className={`
         glass-surface border rounded-xl p-4 shadow-lg max-w-sm w-full
         ${colors[notification.type]}
@@ -84,14 +78,11 @@ const NotificationItem = ({ notification, onDismiss }) => {
 
       {/* Progress bar for auto-close */}
       {notification.autoClose !== false && (
-        <motion.div
+        <div
           className="absolute bottom-0 left-0 h-1 bg-current opacity-30 rounded-b-xl"
-          initial={{ width: '100%' }}
-          animate={{ width: '0%' }}
-          transition={{ duration: notification.duration || 5000, ease: 'linear' }}
         />
       )}
-    </motion.div>
+    </div>
   );
 };
 
@@ -159,15 +150,13 @@ export const NotificationProvider = ({ children }) => {
       
       {/* Notification Container */}
       <div className="fixed top-4 right-4 z-50 space-y-3">
-        <AnimatePresence>
-          {notifications.map(notification => (
-            <NotificationItem
-              key={notification.id}
-              notification={notification}
-              onDismiss={removeNotification}
-            />
-          ))}
-        </AnimatePresence>
+        {notifications.map(notification => (
+          <NotificationItem
+            key={notification.id}
+            notification={notification}
+            onDismiss={removeNotification}
+          />
+        ))}
       </div>
     </NotificationContext.Provider>
   );

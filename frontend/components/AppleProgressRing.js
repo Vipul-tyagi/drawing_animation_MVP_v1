@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import React from 'react';
 
 const AppleProgressRing = ({ 
   progress = 0, 
@@ -48,7 +48,7 @@ const AppleProgressRing = ({
         />
         
         {/* Progress circle */}
-        <motion.circle
+        <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -59,27 +59,18 @@ const AppleProgressRing = ({
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           filter="url(#glow)"
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset }}
-          transition={{
-            duration: 0.8,
-            ease: [0.4, 0, 0.2, 1], // Apple's easing curve
-          }}
           className="drop-shadow-sm"
         />
       </svg>
       
       {showPercentage && (
-        <motion.div
+        <div
           className="absolute inset-0 flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.3 }}
         >
           <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
             {Math.round(progress)}%
           </span>
-        </motion.div>
+        </div>
       )}
     </div>
   );

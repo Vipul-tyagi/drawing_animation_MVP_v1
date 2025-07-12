@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { Download, RotateCcw, Sparkles, Heart, Share, Eye, EyeOff, Volume2, VolumeX } from 'lucide-react';
@@ -16,11 +15,8 @@ const MobileImageViewer = ({ title, imageUrl, isEnhanced = false }) => {
 
   return (
     <>
-      <motion.div
+      <div
         className="space-y-3"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
       >
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-200">
@@ -34,48 +30,39 @@ const MobileImageViewer = ({ title, imageUrl, isEnhanced = false }) => {
         </div>
         
         {imageUrl ? (
-          <motion.div
-            className="relative group overflow-hidden rounded-2xl shadow-lg border-2 border-primary/30 cursor-pointer"
-            onClick={toggleFullscreen}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <img
-              src={imageUrl}
-              alt={title}
-              className="w-full h-auto object-contain bg-white dark:bg-neutral-800"
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <div className="bg-white/90 rounded-full p-3">
-                <Eye className="w-6 h-6 text-neutral-800" />
+            <div
+              className="relative group overflow-hidden rounded-2xl shadow-lg border-2 border-primary/30 cursor-pointer"
+              onClick={toggleFullscreen}
+            >
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full h-auto object-contain bg-white dark:bg-neutral-800"
+              />
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="bg-white/90 rounded-full p-3">
+                  <Eye className="w-6 h-6 text-neutral-800" />
+                </div>
               </div>
             </div>
-          </motion.div>
-        ) : (
-          <div className="aspect-square bg-neutral-100 dark:bg-neutral-800 rounded-2xl flex items-center justify-center border-2 border-dashed border-neutral-300 dark:border-neutral-600">
-            <div className="text-center">
-              <Sparkles className="w-8 h-8 text-neutral-400 mx-auto mb-2" />
-              <p className="text-neutral-500">Creating magic...</p>
+          ) : (
+            <div className="aspect-square bg-neutral-100 dark:bg-neutral-800 rounded-2xl flex items-center justify-center border-2 border-dashed border-neutral-300 dark:border-neutral-600">
+              <div className="text-center">
+                <Sparkles className="w-8 h-8 text-neutral-400 mx-auto mb-2" />
+                <p className="text-neutral-500">Creating magic...</p>
+              </div>
             </div>
-          </div>
-        )}
-      </motion.div>
+          )}
+        </div>
 
-      {/* Fullscreen Modal */}
-      <AnimatePresence>
+        {/* Fullscreen Modal */}
         {isFullscreen && imageUrl && (
-          <motion.div
+          <div
             className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             onClick={toggleFullscreen}
           >
-            <motion.div
+            <div
               className="relative max-w-full max-h-full"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
               onClick={(e) => e.stopPropagation()}
             >
               <img
@@ -89,10 +76,9 @@ const MobileImageViewer = ({ title, imageUrl, isEnhanced = false }) => {
               >
                 <EyeOff className="w-6 h-6" />
               </button>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
     </>
   );
 };
@@ -136,11 +122,8 @@ const MobileStoryReader = ({ storyText }) => {
   };
 
   return (
-    <motion.div
+    <div
       className="space-y-4"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3, duration: 0.5 }}
     >
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
@@ -149,7 +132,7 @@ const MobileStoryReader = ({ storyText }) => {
         </h3>
         
         {'speechSynthesis' in window && (
-          <motion.button
+          <button
             onClick={toggleSpeech}
             className={`
               p-3 rounded-full font-bold text-sm flex items-center gap-2 transition-all duration-300
@@ -158,15 +141,13 @@ const MobileStoryReader = ({ storyText }) => {
                 : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
               }
             `}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
           >
             {isReading ? (
               <VolumeX className="w-4 h-4" />
             ) : (
               <Volume2 className="w-4 h-4" />
             )}
-          </motion.button>
+          </button>
         )}
       </div>
       
@@ -264,20 +245,14 @@ export default function MobileOptimizedOutput({ creation, resetApp }) {
   };
 
   return (
-    <motion.div
+    <div
       className="w-full max-w-2xl mx-auto px-4"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
     >
       <div className="space-y-6" ref={contentRef}>
         {/* Header */}
         <div className="text-center">
-          <motion.div
+          <div
             className="inline-flex items-center gap-3 mb-4"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
           >
             <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg">
               <Sparkles className="w-6 h-6 text-white" />
@@ -285,7 +260,7 @@ export default function MobileOptimizedOutput({ creation, resetApp }) {
             <h2 className="text-2xl font-bold text-primary">
               Your Masterpiece! 🎨
             </h2>
-          </motion.div>
+          </div>
           <p className="text-base text-neutral-600 dark:text-neutral-400">
             Your drawing has been transformed into something magical ✨
           </p>
@@ -314,36 +289,30 @@ export default function MobileOptimizedOutput({ creation, resetApp }) {
 
         {/* Action Buttons - Mobile Optimized */}
         <div className="space-y-3">
-          <motion.button
+          <button
             onClick={handleDownloadPdf}
             className="w-full btn-primary text-lg py-4 flex items-center justify-center gap-3 rounded-2xl"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
           >
             <Download className="w-5 h-5" />
             📄 Save My Story Book
-          </motion.button>
+          </button>
           
           <div className="grid grid-cols-2 gap-3">
-            <motion.button
+            <button
               onClick={handleShare}
               className="btn-secondary text-base py-3 flex items-center justify-center gap-2 rounded-2xl"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
               <Share className="w-4 h-4" />
               🌟 Share
-            </motion.button>
+            </button>
             
-            <motion.button
+            <button
               onClick={resetApp}
               className="btn-ghost text-base py-3 flex items-center justify-center gap-2 rounded-2xl border-2 border-primary/30"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
               <RotateCcw className="w-4 h-4" />
               🎨 New Art
-            </motion.button>
+            </button>
           </div>
         </div>
 
@@ -358,6 +327,6 @@ export default function MobileOptimizedOutput({ creation, resetApp }) {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

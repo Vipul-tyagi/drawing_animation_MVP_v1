@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Camera, CheckCircle, Sparkles, X, Mic, MicOff } from 'lucide-react';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 
@@ -15,12 +14,8 @@ const MobileFilePreview = ({ file, onRemove }) => {
   }, [file]);
 
   return (
-    <motion.div
+    <div
       className="relative w-full"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.3 }}
     >
       <div className="glass-card border-2 border-primary/30 relative overflow-hidden">
         <div className="flex items-center justify-between mb-3">
@@ -51,7 +46,7 @@ const MobileFilePreview = ({ file, onRemove }) => {
           <p>{(file.size / 1024 / 1024).toFixed(1)} MB</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -96,12 +91,10 @@ const MobileUploadZone = ({ onFileSelect, onCameraCapture, isDragActive, isProce
       />
 
       {/* Camera Button - Primary Action */}
-      <motion.button
+      <button
         onClick={handleCameraClick}
         disabled={isProcessing}
         className="w-full btn-primary text-xl py-6 flex items-center justify-center gap-3 rounded-2xl"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
       >
         <Camera className="w-6 h-6" />
         📸 Take Photo of Drawing
@@ -115,12 +108,10 @@ const MobileUploadZone = ({ onFileSelect, onCameraCapture, isDragActive, isProce
       </div>
 
       {/* File Upload Button */}
-      <motion.button
+      <button
         onClick={handleFileClick}
         disabled={isProcessing}
         className="w-full btn-secondary text-lg py-4 flex items-center justify-center gap-3 rounded-2xl"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
       >
         <Upload className="w-5 h-5" />
         📁 Choose from Gallery
@@ -204,7 +195,7 @@ const VoiceStoryInput = ({ value, onChange, isProcessing }) => {
 
       {/* Voice Input Button */}
       {'webkitSpeechRecognition' in window || 'SpeechRecognition' in window ? (
-        <motion.button
+        <button
           type="button"
           onClick={isRecording ? stopVoiceInput : startVoiceInput}
           disabled={isProcessing}
@@ -215,8 +206,6 @@ const VoiceStoryInput = ({ value, onChange, isProcessing }) => {
               : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
             }
           `}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
         >
           {isRecording ? (
             <>
@@ -229,7 +218,7 @@ const VoiceStoryInput = ({ value, onChange, isProcessing }) => {
               🎤 Tell Your Story
             </>
           )}
-        </motion.button>
+        </button>
       ) : (
         <div className="text-center text-sm text-neutral-500 p-4 bg-neutral-100 dark:bg-neutral-800 rounded-xl">
           Voice input not supported on this device
@@ -321,11 +310,8 @@ export default function MobileOptimizedUploadForm({ onGenerateClick, setError })
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
-      <motion.div
+      <div
         className="space-y-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
       >
         {/* Header */}
         <div className="text-center">
@@ -338,7 +324,6 @@ export default function MobileOptimizedUploadForm({ onGenerateClick, setError })
         </div>
 
         {/* File Preview or Upload */}
-        <AnimatePresence mode="wait">
           {selectedFile ? (
             <MobileFilePreview
               key="preview"
@@ -354,7 +339,6 @@ export default function MobileOptimizedUploadForm({ onGenerateClick, setError })
               />
             </div>
           )}
-        </AnimatePresence>
 
         {/* Story Input */}
         <div className="glass-card">
@@ -366,19 +350,17 @@ export default function MobileOptimizedUploadForm({ onGenerateClick, setError })
         </div>
 
         {/* Generate Button */}
-        <motion.button
+        <button
           onClick={handleGenerateStoryClick}
           disabled={!selectedFile || isProcessing}
           className={`
             w-full btn-primary text-xl py-6 flex items-center justify-center gap-3 rounded-2xl
             ${(!selectedFile || isProcessing) ? 'opacity-50 cursor-not-allowed' : ''}
           `}
-          whileHover={selectedFile && !isProcessing ? { scale: 1.02 } : {}}
-          whileTap={selectedFile && !isProcessing ? { scale: 0.98 } : {}}
         >
           <Sparkles className="w-6 h-6" />
           {isProcessing ? '🎭 Creating Magic...' : '✨ Bring My Drawing to Life!'}
-        </motion.button>
+        </button>
 
         {/* Mobile Tips */}
         <div className="glass-card border-2 border-yellow-300/30">
@@ -405,7 +387,7 @@ export default function MobileOptimizedUploadForm({ onGenerateClick, setError })
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

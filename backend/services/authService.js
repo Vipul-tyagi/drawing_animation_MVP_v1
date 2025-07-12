@@ -39,6 +39,7 @@ async function registerUser(email, password) {
       userId: userId,
       email: email,
       passwordHash: passwordHash,
+      balance: 0, // Initialize balance to 0 for new users
     },
   };
 

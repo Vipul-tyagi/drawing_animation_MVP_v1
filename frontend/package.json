@@ -7,10 +7,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^7.4.0",
     "autoprefixer": "^10.4.0",
     "axios": "^1.6.0",
-    "framer-motion": "^10.16.0",
     "formidable": "^3.5.1",
+    "framer-motion": "^10.16.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.525.0",

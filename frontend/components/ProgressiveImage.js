@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
 
 const ProgressiveImage = ({ 
   src, 
@@ -52,58 +51,44 @@ const ProgressiveImage = ({
   return (
     <div ref={imgRef} className={`relative overflow-hidden ${className}`} {...props}>
       {/* Placeholder */}
-      <motion.div
+      <div
         className={`
           absolute inset-0 bg-gradient-to-br from-neutral-100 to-neutral-200 
           dark:from-neutral-800 dark:to-neutral-700 flex items-center justify-center
         `}
-        animate={{ opacity: isLoaded ? 0 : 1 }}
-        transition={{ duration: 0.3 }}
       >
         {placeholder || (
-          <motion.div
+          <div
             className="w-8 h-8 border-2 border-neutral-400 border-t-transparent rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
         )}
-      </motion.div>
+      </div>
 
       {/* Actual Image */}
       {isInView && !error && (
-        <motion.img
+        <img
           src={src}
           alt={alt}
           className={`w-full h-full object-cover ${className}`}
           onLoad={handleLoad}
           onError={handleError}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ 
-            opacity: isLoaded ? 1 : 0,
-            scale: isLoaded ? 1 : 1.1
-          }}
-          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
         />
       )}
 
       {/* Error State */}
       {error && (
-        <motion.div
+        <div
           className="absolute inset-0 bg-neutral-100 dark:bg-neutral-800 flex flex-col items-center justify-center text-neutral-500"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
         >
           <div className="text-2xl mb-2">🖼️</div>
           <div className="text-sm">Failed to load image</div>
-        </motion.div>
+        </div>
       )}
 
       {/* Loading Shimmer Effect */}
       {!isLoaded && !error && (
-        <motion.div
+        <div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-          animate={{ x: ['-100%', '100%'] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
         />
       )}
     </div>

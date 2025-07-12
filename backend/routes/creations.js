@@ -29,7 +29,7 @@ router.get('/my-creations', async (req, res) => {
       IndexName: 'UserCreationsIndex', // Name of the GSI you created
       KeyConditionExpression: 'userId = :u',
       ExpressionAttributeValues: {
-        ':u': req.user.userId,
+        ':u': req.user.email,
       },
     };
 
@@ -56,7 +56,7 @@ router.get('/:creationId', async (req, res) => {
 
     if (Item) {
       // Ensure only the owner can access their creation
-      if (req.user && Item.userId !== req.user.userId) {
+      if (req.user && Item.userId !== req.user.email) {
         return res.status(403).json({ success: false, error: 'Access denied.' });
       }
       res.json({ success: true, creation: Item });

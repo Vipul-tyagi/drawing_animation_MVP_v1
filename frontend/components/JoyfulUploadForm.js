@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
 import { Upload, Image, Sparkles, Camera, CheckCircle, FileImage, Zap, Heart } from 'lucide-react';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
@@ -16,34 +15,19 @@ const MagicalFilePreview = ({ file, onRemove }) => {
   }, [file]);
 
   return (
-    <motion.div
+    <div
       className="relative group"
-      initial={{ opacity: 0, scale: 0.8, y: 50 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.8, y: -50 }}
-      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
     >
       <div className="glass-card border-4 border-primary/30 relative overflow-hidden">
         {/* Magical sparkles */}
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(6)].map((_, i) => (
-            <motion.div
+            <div
               key={i}
               className="absolute text-yellow-400"
               style={{
                 left: `${20 + i * 15}%`,
                 top: `${10 + (i % 2) * 80}%`,
-              }}
-              animate={{
-                scale: [0, 1, 0],
-                rotate: [0, 180, 360],
-                opacity: [0, 1, 0]
-              }}
-              transition={{
-                duration: 2,
-                delay: i * 0.3,
-                repeat: Infinity,
-                ease: "easeInOut"
               }}
             >
               ✨
@@ -52,10 +36,8 @@ const MagicalFilePreview = ({ file, onRemove }) => {
         </div>
 
         <div className="flex items-center gap-3 mb-4 relative z-10">
-          <motion.div
+          <div
             className="w-8 h-8 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
           >
             <CheckCircle className="w-5 h-5 text-white" />
           </motion.div>
@@ -74,13 +56,8 @@ const MagicalFilePreview = ({ file, onRemove }) => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             
             {/* Floating hearts */}
-            <motion.div
+            <div
               className="absolute top-2 right-2 text-2xl"
-              animate={{ 
-                scale: [1, 1.3, 1],
-                rotate: [0, 10, -10, 0]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
             >
               💖
             </motion.div>
@@ -94,11 +71,9 @@ const MagicalFilePreview = ({ file, onRemove }) => {
           </span>
         </div>
         
-        <motion.button
+        <button
           onClick={onRemove}
           className="w-full py-2 px-4 bg-gradient-to-r from-orange-400 to-pink-400 text-white font-bold rounded-full hover:from-orange-500 hover:to-pink-500 transition-all duration-300"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
         >
           🔄 Choose a Different Drawing
         </motion.button>
@@ -117,7 +92,7 @@ const MagicalUploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
   };
 
   return (
-    <motion.div
+    <div
       className={`
         relative border-4 border-dashed rounded-3xl p-12 text-center transition-all duration-500 cursor-pointer overflow-hidden
         ${isDragActive 
@@ -127,29 +102,16 @@ const MagicalUploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
         ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary hover:bg-gradient-to-br hover:from-primary/10 hover:to-secondary/10 hover:scale-102'}
       `}
       onClick={handleClick}
-      whileHover={!isProcessing ? { y: -5 } : {}}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
     >
       {/* Magical background particles */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(8)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
             className="absolute w-2 h-2 bg-primary/30 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 1, 0],
-              y: [0, -50, -100]
-            }}
-            transition={{
-              duration: 3,
-              delay: i * 0.4,
-              repeat: Infinity,
-              ease: "easeOut"
             }}
           />
         ))}
@@ -164,12 +126,10 @@ const MagicalUploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
         disabled={isProcessing}
       />
       
-      <motion.div
+      <div
         className="flex flex-col items-center justify-center relative z-10"
-        animate={{ y: isDragActive ? -10 : 0 }}
-        transition={{ duration: 0.3 }}
       >
-        <motion.div
+        <div
           className={`
             p-6 rounded-3xl mb-6 transition-all duration-500
             ${isDragActive 
@@ -177,21 +137,12 @@ const MagicalUploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
               : 'bg-gradient-to-br from-yellow-400 to-orange-400 text-white shadow-playful'
             }
           `}
-          animate={{ 
-            scale: isDragActive ? 1.2 : 1,
-            rotate: isDragActive ? [0, -10, 10, 0] : [0, 5, -5, 0]
-          }}
-          transition={{ 
-            duration: isDragActive ? 0.5 : 2,
-            repeat: isDragActive ? 0 : Infinity
-          }}
         >
           <FileImage className="w-12 h-12" />
         </motion.div>
         
-        <motion.h3 
+        <h3 
           className="text-2xl font-display font-bold text-primary mb-3"
-          animate={{ scale: isDragActive ? 1.1 : 1 }}
         >
           {isDragActive ? '🎉 Drop your masterpiece here!' : '🎨 Share Your Amazing Drawing!'}
         </motion.h3>
@@ -200,27 +151,22 @@ const MagicalUploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
           Drag and drop your artwork here, or click to browse
         </p>
         
-        <motion.button
+        <button
           type="button"
           className="magical-button flex items-center gap-3 text-lg font-bold"
           disabled={isProcessing}
-          whileHover={!isProcessing ? { scale: 1.1, y: -2 } : {}}
-          whileTap={!isProcessing ? { scale: 0.95 } : {}}
         >
           <Camera className="w-6 h-6" />
           📸 Choose Your Drawing
         </motion.button>
         
-        <motion.p 
+        <p 
           className="text-sm text-neutral-500 mt-4 font-medium"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
         >
           ✨ We support JPG, PNG up to 5MB ✨
         </motion.p>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
@@ -248,47 +194,31 @@ const MagicalStoryInput = ({ value, onChange, isProcessing }) => {
   ];
 
   return (
-    <motion.div
+    <div
       className="glass-card border-4 border-secondary/30 relative overflow-hidden"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4, duration: 0.6 }}
     >
       {/* Magical sparkles background */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(5)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
             className="absolute text-2xl"
             style={{
               left: `${10 + i * 20}%`,
               top: `${10 + (i % 2) * 70}%`,
             }}
-            animate={{
-              scale: [0.5, 1, 0.5],
-              rotate: [0, 180, 360],
-              opacity: [0.3, 0.8, 0.3]
-            }}
-            transition={{
-              duration: 4,
-              delay: i * 0.8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
           >
             {['✨', '🌟', '💫', '⭐', '🎨'][i]}
-          </motion.div>
+          </div>
         ))}
       </div>
 
       <div className="flex items-center gap-3 mb-6 relative z-10">
-        <motion.div
+        <div
           className="w-10 h-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center"
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
         >
           <Sparkles className="w-5 h-5 text-white" />
-        </motion.div>
+        </div>
         <label htmlFor="story" className="text-2xl font-display font-bold text-secondary">
           Tell Us About Your Amazing Drawing! 📖
         </label>
@@ -317,49 +247,33 @@ const MagicalStoryInput = ({ value, onChange, isProcessing }) => {
 
       {/* Magical suggestions */}
       <div className="relative z-10">
-        <motion.button
+        <button
           onClick={() => setShowSuggestions(!showSuggestions)}
           className="flex items-center gap-2 text-lg font-bold text-primary hover:text-secondary transition-colors duration-300 mb-4"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
         >
-          <motion.span
-            animate={{ rotate: showSuggestions ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
-          >
+          <span>
             🎭
-          </motion.span>
+          </span>
           {showSuggestions ? 'Hide' : 'Show'} Magical Story Ideas
-        </motion.button>
+        </button>
         
-        <AnimatePresence>
-          {showSuggestions && (
-            <motion.div
+        {showSuggestions && (
+            <div
               className="space-y-3"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.4 }}
             >
               {suggestions.map((suggestion, index) => (
-                <motion.button
+                <button
                   key={index}
                   onClick={() => onChange(suggestion)}
                   className="block w-full text-left p-4 text-base bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 hover:from-purple-200 hover:to-pink-200 dark:hover:from-purple-800/40 dark:hover:to-pink-800/40 rounded-2xl transition-all duration-300 border-2 border-transparent hover:border-primary/30"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   <span className="font-medium text-neutral-700 dark:text-neutral-300">
                     {suggestion}
                   </span>
-                </motion.button>
+                </button>
               ))}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </div>
     </motion.div>
   );
@@ -471,42 +385,28 @@ export default function JoyfulUploadForm({ onGenerateClick, setError }) {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Main Upload Area */}
         <div className="lg:col-span-3">
-          <motion.div
+          <div
             className="glass-card border-4 border-primary/20 relative overflow-hidden"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           >
             {/* Magical header */}
             <div className="text-center mb-8 relative">
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
+              <div
                 className="inline-flex items-center gap-4 mb-6"
               >
-                <motion.div
+                <div
                   className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-3xl flex items-center justify-center shadow-magical"
-                  animate={{ 
-                    rotate: [0, 5, -5, 0],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
                 >
                   <Upload className="w-8 h-8 text-white" />
-                </motion.div>
+                </div>
                 <h2 className="text-4xl font-display font-bold rainbow-text">
                   Share Your Amazing Drawing! 🎨
                 </h2>
-              </motion.div>
-              <motion.p
+              </div>
+              <p
                 className="text-xl text-neutral-600 dark:text-neutral-400 font-medium"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
               >
                 Upload your artwork and we'll create a magical bedtime story just for you! ✨
-              </motion.p>
+              </p>
             </div>
 
             {/* File Preview or Upload Zone */}
@@ -544,13 +444,10 @@ export default function JoyfulUploadForm({ onGenerateClick, setError }) {
             </div>
 
             {/* Generate Button */}
-            <motion.div
+            <div
               className="text-center mt-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <motion.button
+              <button
                 onClick={handleGenerateStoryClick}
                 disabled={!selectedFile || isProcessing}
                 className={`
@@ -559,111 +456,70 @@ export default function JoyfulUploadForm({ onGenerateClick, setError }) {
                   text-white shadow-magical border-4 border-white/30
                   ${(!selectedFile || isProcessing) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-rainbow animate-rainbow'}
                 `}
-                whileHover={selectedFile && !isProcessing ? { 
-                  scale: 1.1, 
-                  y: -5,
-                  boxShadow: "0 0 40px rgba(237, 78, 255, 0.6)"
-                } : {}}
-                whileTap={selectedFile && !isProcessing ? { scale: 0.95 } : {}}
-                animate={isProcessing ? { 
-                  scale: [1, 1.05, 1],
-                  boxShadow: ["0 0 20px rgba(237, 78, 255, 0.3)", "0 0 40px rgba(56, 189, 248, 0.5)", "0 0 20px rgba(237, 78, 255, 0.3)"]
-                } : {}}
-                transition={{ duration: 0.3 }}
               >
-                <motion.div
+                <div
                   className="flex items-center gap-4"
-                  animate={isProcessing ? { x: [0, 10, -10, 0] } : {}}
-                  transition={{ duration: 1, repeat: isProcessing ? Infinity : 0 }}
                 >
-                  <motion.span
-                    animate={{ rotate: isProcessing ? 360 : 0 }}
-                    transition={{ duration: 2, repeat: isProcessing ? Infinity : 0, ease: "linear" }}
-                  >
+                  <span>
                     {isProcessing ? '🎭' : '✨'}
-                  </motion.span>
+                  </span>
                   {isProcessing ? '🎨 Creating Your Magic Story...' : '🚀 Bring My Drawing to Life!'}
                   <Heart className="w-6 h-6" />
-                </motion.div>
+                </div>
                 
                 {/* Progress Bar */}
                 {isProcessing && (
-                  <motion.div
+                  <div
                     className="absolute bottom-0 left-0 h-2 bg-white/40 rounded-b-full"
-                    initial={{ width: '0%' }}
-                    animate={{ width: `${uploadProgress}%` }}
-                    transition={{ duration: 0.3 }}
                   />
                 )}
                 
                 {/* Magical shimmer effect */}
                 {selectedFile && !isProcessing && (
-                  <motion.div
+                  <div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    initial={{ x: '-100%' }}
-                    animate={{ x: '100%' }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
                   />
                 )}
-              </motion.button>
+              </button>
               
               {selectedFile && (
-                <motion.p
+                <p
                   className="text-lg font-medium text-primary mt-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
                 >
                   💡 Swipe up to create your story quickly! 📱✨
-                </motion.p>
+                </p>
               )}
-            </motion.div>
+            </div>
           </motion.div>
         </div>
 
         {/* Magical Tips Sidebar */}
-        <motion.div
+        <div
           className="lg:col-span-1"
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
         >
           <div className="glass-card sticky top-8 border-4 border-yellow-300/30 relative overflow-hidden">
             {/* Floating elements */}
             <div className="absolute inset-0 pointer-events-none">
               {['📸', '🌟', '💡', '🎨', '✨'].map((emoji, i) => (
-                <motion.div
+                <div
                   key={i}
                   className="absolute text-2xl"
                   style={{
                     left: `${20 + i * 15}%`,
                     top: `${10 + (i % 3) * 30}%`,
                   }}
-                  animate={{
-                    y: [0, -10, 0],
-                    rotate: [0, 10, -10, 0],
-                    scale: [1, 1.2, 1]
-                  }}
-                  transition={{
-                    duration: 3,
-                    delay: i * 0.5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
                 >
                   {emoji}
-                </motion.div>
+                </div>
               ))}
             </div>
 
             <div className="flex items-center gap-3 mb-6 relative z-10">
-              <motion.div
+              <div
                 className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center"
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               >
                 <Camera className="w-5 h-5 text-white" />
-              </motion.div>
+              </div>
               <h4 className="text-xl font-display font-bold text-yellow-600 dark:text-yellow-400">
                 📸 Photo Magic Tips
               </h4>
@@ -677,22 +533,16 @@ export default function JoyfulUploadForm({ onGenerateClick, setError }) {
                 { icon: "🚫", text: "Avoid dark shadows", tip: "Even lighting helps our AI see better" },
                 { icon: "📱", text: "Hold your phone steady", tip: "Use both hands for the clearest photo" }
               ].map((tip, index) => (
-                <motion.li
+                <li
                   key={index}
                   className="group cursor-pointer"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                  whileHover={{ scale: 1.05, x: 5 }}
                 >
                   <div className="flex items-start gap-3 p-3 rounded-2xl bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 group-hover:from-yellow-100 group-hover:to-orange-100 dark:group-hover:from-yellow-800/30 dark:group-hover:to-orange-800/30 transition-all duration-300">
-                    <motion.span 
+                    <span 
                       className="text-2xl flex-shrink-0"
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
                     >
                       {tip.icon}
-                    </motion.span>
+                    </span>
                     <div>
                       <span className="font-bold text-neutral-700 dark:text-neutral-300 block">
                         {tip.text}
@@ -702,28 +552,19 @@ export default function JoyfulUploadForm({ onGenerateClick, setError }) {
                       </span>
                     </div>
                   </div>
-                </motion.li>
+                </li>
               ))}
             </ul>
             
-            <motion.div
+            <div
               className="mt-6 p-6 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-2xl border-4 border-purple-200/50 relative z-10"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-start gap-3">
-                <motion.span 
+                <span 
                   className="text-3xl"
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 10, -10, 0]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
                 >
                   💡
-                </motion.span>
+                </span>
                 <div>
                   <p className="font-display font-bold text-purple-600 dark:text-purple-400 mb-2 text-lg">
                     Super Secret Tip! 🤫
@@ -733,9 +574,9 @@ export default function JoyfulUploadForm({ onGenerateClick, setError }) {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

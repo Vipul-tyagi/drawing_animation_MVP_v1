@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
 import { Upload, Image, Sparkles, Camera, CheckCircle, FileImage, Zap } from 'lucide-react';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
@@ -20,12 +19,8 @@ const FilePreview = ({ file, onRemove }) => {
   }, [file]);
 
   return (
-    <motion.div
+    <div
       className="relative group"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.3 }}
     >
       <div className="glass-surface p-4 rounded-2xl">
         <div className="flex items-center gap-3 mb-3">
@@ -72,7 +67,7 @@ const UploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
   };
 
   return (
-    <motion.div
+    <div
       className={`
         relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer
         ${isDragActive 
@@ -82,8 +77,6 @@ const UploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
         ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary/50 hover:bg-primary/5'}
       `}
       onClick={handleClick}
-      whileHover={!isProcessing ? { scale: 1.01 } : {}}
-      transition={{ duration: 0.2 }}
     >
       <input
         type="file"
@@ -94,12 +87,10 @@ const UploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
         disabled={isProcessing}
       />
       
-      <motion.div
+      <div
         className="flex flex-col items-center justify-center"
-        animate={{ y: isDragActive ? -5 : 0 }}
-        transition={{ duration: 0.2 }}
       >
-        <motion.div
+        <div
           className={`
             p-4 rounded-2xl mb-4 transition-colors duration-300
             ${isDragActive 
@@ -107,11 +98,6 @@ const UploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
               : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400'
             }
           `}
-          animate={{ 
-            scale: isDragActive ? 1.1 : 1,
-            rotate: isDragActive ? [0, -5, 5, 0] : 0
-          }}
-          transition={{ duration: 0.3 }}
         >
           <FileImage className="w-8 h-8" />
         </motion.div>
@@ -124,12 +110,10 @@ const UploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
           or
         </p>
         
-        <motion.button
+        <button
           type="button"
           className="btn-primary flex items-center gap-2"
           disabled={isProcessing}
-          whileHover={!isProcessing ? { scale: 1.05 } : {}}
-          whileTap={!isProcessing ? { scale: 0.95 } : {}}
         >
           <Camera className="w-4 h-4" />
           Browse Files
@@ -138,8 +122,8 @@ const UploadZone = ({ onFileSelect, isDragActive, isProcessing }) => {
         <p className="text-caption mt-4">
           Supports JPG, PNG up to 5MB
         </p>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
@@ -166,11 +150,8 @@ const StoryInput = ({ value, onChange, isProcessing }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   return (
-    <motion.div
+    <div
       className="glass-surface p-6 rounded-2xl"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4, duration: 0.5 }}
     >
       <div className="flex items-center gap-3 mb-4">
         <Sparkles className="w-5 h-5 text-primary" />
@@ -216,30 +197,20 @@ const StoryInput = ({ value, onChange, isProcessing }) => {
           {showSuggestions ? 'Hide' : 'Show'} example ideas
         </button>
         
-        <AnimatePresence>
-          {showSuggestions && (
-            <motion.div
-              className="mt-3 space-y-2"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+        <div
+          className="mt-3 space-y-2"
+        >
               {suggestions.map((suggestion, index) => (
-                <motion.button
+                <button
                   key={index}
                   onClick={() => onChange(suggestion)}
                   className="block w-full text-left p-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
                 >
                   "{suggestion}"
                 </motion.button>
               ))}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </div>
     </motion.div>
   );

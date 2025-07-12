@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Upload, Sparkles, BookOpen, Download, X } from 'lucide-react';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 
@@ -14,18 +13,13 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
       icon: <Sparkles className="w-12 h-12 text-primary" />,
       visual: (
         <div className="relative w-64 h-64 mx-auto">
-          <motion.div
+          <div
             className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl"
-            animate={{ rotate: [0, 5, -5, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
           <div className="absolute inset-4 bg-white dark:bg-neutral-800 rounded-2xl flex items-center justify-center">
-            <motion.div
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
+            <div>
               ✨
-            </motion.div>
+            </div>
           </div>
         </div>
       )
@@ -37,20 +31,16 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
       icon: <Upload className="w-12 h-12 text-primary" />,
       visual: (
         <div className="space-y-4">
-          <motion.div
+          <div
             className="w-48 h-32 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-xl border-2 border-dashed border-primary/50 flex items-center justify-center"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
           >
             <Upload className="w-8 h-8 text-primary/70" />
-          </motion.div>
+          </div>
           <div className="flex justify-center gap-2">
             {[1, 2, 3].map((i) => (
-              <motion.div
+              <div
                 key={i}
                 className="w-2 h-2 bg-primary rounded-full"
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
               />
             ))}
           </div>
@@ -64,18 +54,14 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
       icon: <Sparkles className="w-12 h-12 text-primary" />,
       visual: (
         <div className="relative">
-          <motion.div
+          <div
             className="w-32 h-32 bg-gradient-to-br from-yellow-200 to-orange-200 dark:from-yellow-800/50 dark:to-orange-800/50 rounded-xl mx-auto"
-            animate={{ x: [-20, 20, -20] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.div
+          <div
             className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-primary rounded-full flex items-center justify-center"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
           >
             ✨
-          </motion.div>
+          </div>
         </div>
       )
     },
@@ -85,10 +71,8 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
       content: "Describe your drawing and our AI will craft a magical, personalized story that brings your artwork to life.",
       icon: <BookOpen className="w-12 h-12 text-primary" />,
       visual: (
-        <motion.div
+        <div
           className="w-48 h-32 mx-auto bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 rounded-xl p-4 flex items-center justify-center"
-          animate={{ rotateY: [0, 10, 0] }}
-          transition={{ duration: 4, repeat: Infinity }}
         >
           <div className="text-center">
             <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
@@ -96,7 +80,7 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
               "Once upon a time..."
             </div>
           </div>
-        </motion.div>
+        </div>
       )
     },
     {
@@ -107,15 +91,13 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
       visual: (
         <div className="flex justify-center gap-4">
           {['PDF', 'PNG', 'Share'].map((format, i) => (
-            <motion.div
+            <div
               key={format}
               className="w-16 h-20 bg-white dark:bg-neutral-800 rounded-lg shadow-lg flex flex-col items-center justify-center text-xs font-medium"
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
             >
               <Download className="w-4 h-4 text-primary mb-1" />
               {format}
-            </motion.div>
+            </div>
           ))}
         </div>
       )
@@ -125,12 +107,8 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
   const currentStep = steps[step];
 
   return (
-    <motion.div
+    <div
       className="text-center max-w-lg mx-auto"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
     >
       {/* Visual */}
       <div className="mb-8">
@@ -139,14 +117,11 @@ const OnboardingStep = ({ step, isActive, onNext, onPrev, onSkip }) => {
 
       {/* Content */}
       <div className="mb-8">
-        <motion.div
+        <div
           className="mb-4"
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
         >
           {currentStep.icon}
-        </motion.div>
+        </div>
         
         <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-2">
           {currentStep.title}
@@ -256,18 +231,11 @@ export default function OnboardingFlow({ onComplete }) {
   if (!isVisible) return null;
 
   return (
-    <motion.div
+    <div
       className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
     >
-      <motion.div
+      <div
         className="glass-card max-w-2xl w-full relative"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
       >
         {/* Close Button */}
         <button
@@ -277,17 +245,15 @@ export default function OnboardingFlow({ onComplete }) {
           <X className="w-5 h-5" />
         </button>
 
-        <AnimatePresence mode="wait">
-          <OnboardingStep
-            key={currentStep}
-            step={currentStep}
-            isActive={true}
-            onNext={handleNext}
-            onPrev={handlePrev}
-            onSkip={handleComplete}
-          />
-        </AnimatePresence>
-      </motion.div>
-    </motion.div>
+        <OnboardingStep
+          key={currentStep}
+          step={currentStep}
+          isActive={true}
+          onNext={handleNext}
+          onPrev={handlePrev}
+          onSkip={handleComplete}
+        />
+      </div>
+    </div>
   );
 }

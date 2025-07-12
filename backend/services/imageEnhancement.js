@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const OpenAI = require('openai');
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, GetCommand, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
 
 // Initialize S3 Client
 const s3Client = new S3Client({
@@ -42,7 +42,16 @@ async function enhanceImage(imageId, enhancementType, prompt) {
   console.log('enhanceImage called with:', { imageId, enhancementType, prompt });
   try {
     // Assuming imageId is the S3 key for the original image
-    const s3KeyOriginal = `uploads/${imageId}.jpeg`; // Adjust extension if needed
+    const { Item } = await docClient.send(new GetCommand({
+      TableName: CREATIONS_TABLE_NAME,
+      Key: { creationId: imageId },
+    }));
+
+    if (!Item || !Item.s3Key) {
+      throw new Error(`Creation record or s3Key not found for imageId: ${imageId}`);
+    }
+
+    const s3KeyOriginal = Item.s3Key;
 
     if (enhancementType === 'stylize') {
       console.log('Enhancement type: stylize');

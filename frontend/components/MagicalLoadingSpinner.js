@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const magicalMessages = [
   { text: "Sprinkling magic dust on your drawing...", emoji: "✨", color: "text-primary" },
@@ -12,29 +11,11 @@ const magicalMessages = [
 ];
 
 const FloatingEmoji = ({ emoji, delay = 0 }) => (
-  <motion.div
+  <div
     className="absolute text-4xl pointer-events-none"
-    initial={{ 
-      opacity: 0, 
-      scale: 0,
-      x: Math.random() * 400 - 200,
-      y: Math.random() * 400 - 200
-    }}
-    animate={{ 
-      opacity: [0, 1, 1, 0],
-      scale: [0, 1.2, 1, 0.8],
-      y: [0, -50, -100, -150],
-      rotate: [0, 180, 360]
-    }}
-    transition={{
-      duration: 4,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }}
   >
     {emoji}
-  </motion.div>
+  </div>
 );
 
 const RainbowProgressRing = ({ progress = 0, size = 120 }) => {
@@ -81,7 +62,7 @@ const RainbowProgressRing = ({ progress = 0, size = 120 }) => {
         />
         
         {/* Progress circle */}
-        <motion.circle
+        <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -92,27 +73,19 @@ const RainbowProgressRing = ({ progress = 0, size = 120 }) => {
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           filter="url(#glow)"
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset }}
-          transition={{
-            duration: 1,
-            ease: [0.4, 0, 0.2, 1],
-          }}
         />
       </svg>
       
       {/* Center content */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <motion.div
+        <div
           className="text-center"
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
         >
           <div className="text-3xl mb-2">🎨</div>
           <div className="text-lg font-bold text-primary">
             {Math.round(progress)}%
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -142,11 +115,8 @@ export default function MagicalLoadingSpinner({ message = "", progress = null })
   const messageColor = typeof currentMessage === 'object' ? currentMessage.color : "text-primary";
 
   return (
-    <motion.div 
+    <div 
       className="flex flex-col items-center justify-center py-16 px-8 relative overflow-hidden"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
     >
       {/* Floating magical elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -160,133 +130,81 @@ export default function MagicalLoadingSpinner({ message = "", progress = null })
         {progress !== null ? (
           <RainbowProgressRing progress={progress} />
         ) : (
-          <motion.div
+          <div
             className="relative"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
           >
             <div className="w-24 h-24 rounded-full border-8 border-transparent bg-gradient-to-r from-primary via-secondary to-primary bg-clip-border animate-pulse-rainbow"></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
+              <div
                 className="text-4xl"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 10, -10, 0]
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
               >
                 🎨
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
 
       {/* Message display */}
       <div className="text-center max-w-md z-10">
-        <AnimatePresence mode="wait">
-          <motion.div
+        <div
             key={messageIndex}
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             className="flex items-center justify-center gap-3 mb-6"
           >
-            <motion.span
+            <span
               className="text-3xl"
-              animate={{ 
-                scale: [1, 1.3, 1],
-                rotate: [0, 15, -15, 0]
-              }}
-              transition={{ 
-                duration: 2, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
             >
               {messageEmoji}
-            </motion.span>
+            </span>
             <h3 className={`text-xl font-bold ${messageColor} font-display`}>
               {messageText}
             </h3>
-          </motion.div>
-        </AnimatePresence>
+          </div>
 
         {/* Progress dots */}
         <div className="flex justify-center gap-2 mb-6">
           {magicalMessages.map((_, index) => (
-            <motion.div
+            <div
               key={index}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === messageIndex 
                   ? 'bg-primary shadow-magical' 
                   : 'bg-neutral-300 dark:bg-neutral-600'
               }`}
-              animate={{
-                scale: index === messageIndex ? [1, 1.4, 1] : 1,
-              }}
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut"
-              }}
             />
           ))}
         </div>
 
         {/* Encouraging message */}
-        <motion.div
+        <div
           className="glass-surface p-4 rounded-2xl border-2 border-primary/20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
         >
           <p className="text-sm text-neutral-600 dark:text-neutral-300 font-medium">
             🌟 Your masterpiece is being transformed into something truly magical! 
             This usually takes 30-60 seconds of pure wonder ✨
           </p>
-        </motion.div>
+        </div>
       </div>
 
       {/* Celebration effect */}
-      <AnimatePresence>
         {showCelebration && (
-          <motion.div
+          <div
             className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
           >
             {[...Array(20)].map((_, i) => (
-              <motion.div
+              <div
                 key={i}
                 className="absolute text-2xl"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
                 }}
-                initial={{ scale: 0, rotate: 0 }}
-                animate={{ 
-                  scale: [0, 1, 0],
-                  rotate: [0, 360],
-                  y: [0, -100]
-                }}
-                transition={{
-                  duration: 2,
-                  delay: i * 0.1,
-                  ease: "easeOut"
-                }}
               >
                 {['🎉', '🎊', '✨', '🌟', '💫'][Math.floor(Math.random() * 5)]}
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

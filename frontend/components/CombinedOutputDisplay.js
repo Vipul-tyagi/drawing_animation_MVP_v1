@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { Download, RotateCcw, Sparkles, Heart, Share } from 'lucide-react';
@@ -75,11 +74,8 @@ export default function CombinedOutputDisplay({ creation, resetApp }) {
   };
 
   return (
-    <motion.div
+    <div
       className="w-full max-w-4xl mx-auto"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
     >
       <div className="glass-card" ref={contentRef}>
         {/* Header */}
@@ -137,18 +133,15 @@ export default function CombinedOutputDisplay({ creation, resetApp }) {
             </div>
             
             {enhancedImageUrl ? (
-              <motion.div
+              <div
                 className="relative group overflow-hidden rounded-xl shadow-lg"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
               >
                 <img
                   src={enhancedImageUrl}
                   alt="Enhanced Drawing"
                   className="w-full h-auto object-contain"
                 />
-              </motion.div>
+              </div>
             ) : (
               <div className="aspect-square glass-surface rounded-xl flex items-center justify-center border-2 border-dashed border-neutral-300 dark:border-neutral-600">
                 <div className="text-center">
@@ -214,6 +207,6 @@ export default function CombinedOutputDisplay({ creation, resetApp }) {
           </p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
